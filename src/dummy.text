@@ -1,0 +1,309 @@
+
+            <View style={styles.productListCon}>
+              <Text style={styles.productListConTitle}>Top Selling</Text>
+              <ScrollView style={styles.productListConSlides} horizontal showsHorizontalScrollIndicator={false} >
+                {
+                  entries_carosels.map((item, index) => (
+                    <View style={styles.slideProduct} key={index}>
+                        <Image source={{ uri: item.image }} borderRadius={5} resizeMode="cover" style={styles.slideProductImage} />
+                        <View style={styles.slideProductCon}>
+                          <Text style={styles.slideProductConTitle}>{ item.title }</Text>
+                          <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.text }</Text> 
+                          <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
+                              <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
+                                  <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
+                              </Button>
+                              <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                                  + Cart
+                              </Button>
+                          </View>
+                        </View>
+                    </View>
+                  ))
+                } 
+              </ScrollView>
+            </View>
+            
+            <View style={styles.productListCon}>
+              <Text style={styles.productListConTitle}>Groceries</Text>
+              <ScrollView style={styles.productListConSlides} horizontal showsHorizontalScrollIndicator={false} >
+                {
+                  entries_carosels.map((item, index) => (
+                    <View style={styles.slideProduct} key={index}>
+                        <Image source={{ uri: item.image }} borderRadius={5} resizeMode="cover" style={styles.slideProductImage} />
+                        <View style={styles.slideProductCon}>
+                          <Text style={styles.slideProductConTitle}>{ item.title }</Text>
+                          <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.text }</Text> 
+                          <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
+                              <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
+                                  <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
+                              </Button>
+                              <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                                  + Cart
+                              </Button>
+                          </View>
+                        </View>
+                    </View>
+                  ))
+                } 
+              </ScrollView>
+            </View>
+
+            {/* <View style={styles.addCon}>
+              <Text style={styles.addConText}>ADs Section</Text>
+            </View> */}
+            <View style={styles.productListCon}>
+              <Text style={styles.productListConTitle}>Herbs and Spices</Text>
+              <ScrollView style={styles.productListConSlides} horizontal showsHorizontalScrollIndicator={false} >
+                {
+                  entries_carosels.map((item, index) => (
+                    <View style={styles.slideProduct} key={index}>
+                        <Image source={{ uri: item.image }} borderRadius={5} resizeMode="cover" style={styles.slideProductImage} />
+                        <View style={styles.slideProductCon}>
+                          <Text style={styles.slideProductConTitle}>{ item.title }</Text>
+                          <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.text }</Text> 
+                          <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
+                              <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
+                                  <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
+                              </Button>
+                              <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                                  + Cart
+                              </Button>
+                          </View>
+                        </View>
+                    </View>
+                  ))
+                } 
+              </ScrollView>
+            </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import {
+    CardFieldInput,
+    PaymentMethodCreateParams,
+  } from '@stripe/stripe-react-native';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, Alert, View, Dimensions, Image, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
+import { Button, TextInput, Snackbar  } from 'react-native-paper';
+import { CardField, useConfirmPayment } from '@stripe/stripe-react-native';
+import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
+
+const { width, height } = Dimensions.get('window');
+
+import  PaymentScreen from './components/PaymentScreen'
+
+export default function makePayment(){
+    const [email, setEmail] = useState('');
+    const [saveCard, setSaveCard] = useState(false);
+    const { confirmPayment, loading } = useConfirmPayment();
+    const [ userDetails, setUserDetails ] = useState({
+                                                    first_name: '',
+                                                    last_name: '',
+                                                    email: '',
+                                                    password: '',
+                                                    dob: '',
+                                                    country: '',
+                                                });
+    const [visible, setVisible] = React.useState(false);
+    const [ message, setMessage ] = useState('');
+    const [ submitting, setSubmitting ] = useState(false);
+
+    const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
+
+    const fetchPaymentIntentClientSecret = async () => {
+        const response = await fetch(`${API_URL}/create-payment-intent`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email,
+            currency: 'usd',
+            items: [{ id: 'id' }],
+            // request_three_d_secure: 'any',
+        }),
+        });
+        const { clientSecret } = await response.json();
+
+        return clientSecret;
+    };
+
+    const handlePayPayment = async () => {
+        // 1. fetch Intent Client Secret from backend
+        const clientSecret = 'sk_test_51HFTeDDTsjZr0XgPwad0sTznblNjHZGmBsPqaM1qwSfxnjAtH9UyeNslfYym5VlfL2p9PJYIqCmLEd5R4Qdr6Ozb00ktDH1iS4';
+
+        // 2. Gather customer billing information (ex. email)
+        const billingDetails: PaymentMethodCreateParams.BillingDetails = {
+          email: userDetails.email,
+          phone: '+48888000888',
+          addressCity: 'Houston',
+          addressCountry: 'US',
+          addressLine1: '1459  Circle Drive',
+          addressLine2: 'Texas',
+          addressPostalCode: '77063',
+        }; // mocked data for tests
+
+        // 3. Confirm payment with card details
+        // The rest will be done automatically using webhooks
+        const { error, paymentIntent } = await confirmPayment(clientSecret, {
+          type: 'Card',
+          billingDetails,
+          setupFutureUsage: saveCard ? 'OffSession' : undefined,
+        });
+
+        if (error) {
+//          Alert.alert(`Error code: ${error.code}`, error.message);
+          setMessage('Payment confirmation error'); setVisible(true);
+          console.log('Payment confirmation error', error.message);
+        } else if (paymentIntent) {
+          Alert.alert(
+            'Success',
+            `The payment was confirmed successfully! currency: ${paymentIntent.currency}`
+          );
+          console.log('Success from promise', paymentIntent);
+          setMessage('Success from promise '+paymentIntent); setVisible(true);
+        }
+      };
+
+    return (
+        <View style={styles.container}>
+            <PaymentScreen>
+                <View style={styles.formGroup}>
+                    <TextInput
+                        placeholder="outlined"
+                        label="Email"
+                        style={{ height: 50, fontSize: 12, }}
+                        value={userDetails.email}
+                        onChangeText={val => setUserDetails({ ...userDetails, email: val })}
+                    />
+                </View>
+                <CardField
+                    postalCodeEnabled={true}
+                    placeholder={{
+                        number: '4242 4242 4242 4242',
+                    }}
+                    cardStyle={{
+                        backgroundColor: '#FFFFFF',
+                        textColor: '#000000',
+                    }}
+                    style={{
+                        width: '100%',
+                        height: 50,
+                        marginVertical: 30,
+                    }}
+                    onCardChange={(cardDetails) => {
+                        console.log('cardDetails', cardDetails);
+                    }}
+                    onFocus={(focusedField) => {
+                        console.log('focusField', focusedField);
+                    }}
+                />
+            </PaymentScreen>
+            <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => handlePayPayment()} >
+              Confirm Payment
+            </Button>
+             <Snackbar
+                visible={visible}
+                onDismiss={onDismissSnackBar}
+                action={{
+                    label: 'Close',
+                    onPress: () => {
+                      setMessage('');
+                      setVisible(false);
+                    },
+                }}>
+                { message }
+             </Snackbar>
+        </View>
+      );
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  head:{
+    width,
+    flex: 1.5,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  body:{
+    width,
+    flex: 2.5,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+  },
+  headerText:{
+    fontSize: 25,
+    fontFamily: 'Montserrat-Bold',
+    top: '5%'
+  },
+  headerTexth2:{
+    fontSize: 20,
+    fontFamily: 'Montserrat-Regular',
+    top: '10%'
+  },
+  formBox:{
+    width: '100%',
+  },
+  formGroup:{
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    marginVertical: 20
+  },
+  input:{
+    width: '100%',
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    color: '#000',
+    left: 10
+  },
+  button:{
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText:{
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    color: '#fff'
+  }
+});
+
+
