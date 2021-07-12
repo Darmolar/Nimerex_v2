@@ -1,9 +1,10 @@
+
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, Alert, View, Dimensions, Image, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
 import { Button, TextInput, Snackbar  } from 'react-native-paper';
-import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';  
+import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
 import { GooglePay } from 'react-native-google-pay';
 
 const { width, height } = Dimensions.get('window');
@@ -64,8 +65,8 @@ export default function makePayment(){
         // Check if Google Pay is available
         GooglePay.isReadyToPay(allowedCardNetworks, allowedCardAuthMethods)
           .then((ready) => {
-            if (ready) {
-            console.log("Can use adroid pay");
+//            if (ready) {
+            console.log("Can use adnroid pay");
               // Request payment token
               GooglePay.requestPayment(requestData)
                 .then((token: string) => {
@@ -73,15 +74,15 @@ export default function makePayment(){
                   console.log(token);
                 })
                 .catch((error) => console.log(error.code, error.message));
-            }else{
-                console.log("Cannot use adroid pay");
-            }
+//            }else{
+//                console.log("Cannot use android pay");
+//            }
         })
       }
 
     return (
         <View style={styles.container}>
-           <Text>Testing google pay</Text>
+           <Text>Testing google pay </Text>
         </View>
       );
 }
