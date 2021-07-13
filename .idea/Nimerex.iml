@@ -3,13 +3,14 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../Nimerex/gen" />
-        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../Nimerex/gen" />
-        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../Nimerex/AndroidManifest.xml" />
-        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../Nimerex/res" />
-        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../Nimerex/assets" />
-        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../Nimerex/libs" />
-        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../Nimerex/proguard_logs" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../android/app/src/main/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/../res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../libs" />
+        <option name="PROJECT_TYPE" value="1" />
+        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../proguard_logs" />
       </configuration>
     </facet>
   </component>

@@ -94,8 +94,8 @@ export default function HomeScreen({ navigation }) {
                   itemWidth={width - 40}
                 />
             </View> 
-            {   
-              // console.log(allProducts["category"])
+            {
+              allProducts["category"] &&
               Object.keys(allProducts["category"]).map((item, index) => {
                 // console.log(allProducts["category"][item])
                 if(allProducts["category"][item].length < 1){

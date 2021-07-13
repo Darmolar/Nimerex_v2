@@ -23,13 +23,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5458fa27-7529-4ac3-a7e6-5a4956922ef4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Nimerex.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nimerex.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/nimerex/NimerexApp/generated/BasePackageList.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/nimerex/NimerexApp/generated/BasePackageList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GooglePay.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/GooglePay.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dummy.text" beforeDir="false" afterPath="$PROJECT_DIR$/src/dummy.text" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,14 +39,18 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1v4TbtIZ1mU1blVMQZqiAPckLsF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable" value="ALL" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -82,26 +85,36 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="163" y="0" key="#Project_Structure" timestamp="1625937749796">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="163" y="0" key="#Project_Structure" timestamp="1626089394792">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="163" y="0" key="#Project_Structure/0.0.1366.728@0.0.1366.728" timestamp="1626089394792" />
     <state x="163" y="0" key="#Project_Structure/0.0.1366.768@0.0.1366.768" timestamp="1625937749796" />
     <state x="137" y="30" width="1092" height="738" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1625844802270">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="137" y="30" width="1092" height="738" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1625844802270" />
-    <state x="-7" y="29" width="1038" height="584" key="AVDManager" timestamp="1626040351803">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1626088161040">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1626088161040" />
+    <state x="-7" y="27" width="1038" height="554" key="AVDManager" timestamp="1626126879160">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="-7" y="27" width="1038" height="554" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1626126879160" />
     <state x="-7" y="29" width="1038" height="584" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1626040351803" />
     <state x="489" y="132" key="AndroidProcessChooserDialog" timestamp="1625843388332">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="489" y="132" key="AndroidProcessChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1625843388332" />
-    <state x="381" y="128" key="FileChooserDialogImpl" timestamp="1625858394201">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="381" y="121" key="FileChooserDialogImpl" timestamp="1626089389042">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="381" y="121" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1626089389042" />
     <state x="381" y="128" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1625858394201" />
     <state width="1323" height="150" key="GridCell.Tab.0.bottom" timestamp="1626033377581">
       <screen x="0" y="0" width="1366" height="768" />
@@ -127,5 +140,9 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="339" y="172" width="672" height="677" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1625917627984" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1626091505755">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1626091505755" />
   </component>
 </project>

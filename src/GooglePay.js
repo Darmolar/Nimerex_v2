@@ -11,37 +11,12 @@ const { width, height } = Dimensions.get('window');
 const allowedCardNetworks = ['VISA', 'MASTERCARD'];
 const allowedCardAuthMethods = ['PAN_ONLY', 'CRYPTOGRAM_3DS'];
 
-const requestData = {
-  cardPaymentMethod: {
-    tokenizationSpecification: {
-      type: 'PAYMENT_GATEWAY',
-      // stripe (see Example):
-      gateway: 'stripe',
-      gatewayMerchantId: '',
-      stripe: {
-        publishableKey: 'pk_test_51HFTeDDTsjZr0XgPcARyAbLibQ5YO0VObZPwfuMP4k2h70WXr3Fe0wGgjVF3bOTl4keMbJhohgWfQYTU9UKnPMRr00G1kf3rFY',
-        version: '2018-11-08',
-      },
-      // other:
-      gateway: 'example',
-      gatewayMerchantId: 'exampleGatewayMerchantId',
-    },
-    allowedCardNetworks,
-    allowedCardAuthMethods,
-  },
-  transaction: {
-    totalPrice: '30',
-    totalPriceStatus: 'FINAL',
-    currencyCode: 'USD',
-  },
-  merchantName: 'Nimarex',
-};
-
 // Set the environment before the payment request
 GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
 
-export default function makePayment(){
+export default function makePayment({ navigation, route }){
     const [ email, setEmail ] = useState('');
+    const { totalPayment, carts, fax } = route.params;
     const [ userDetails, setUserDetails ] = useState({
                                                     first_name: '',
                                                     last_name: '',
@@ -58,31 +33,64 @@ export default function makePayment(){
     const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
 
     useEffect(()=>{
+       setSubmitting(true)
        makePayment();
     },[])
+
+    const requestData = {
+      cardPaymentMethod: {
+        tokenizationSpecification: {
+          type: 'PAYMENT_GATEWAY',
+          // stripe (see Example):
+          gateway: 'authorizenet',
+          gatewayMerchantId: '743444',
+//          stripe: {
+//            publishableKey: 'pk_test_51HFTeDDTsjZr0XgPcARyAbLibQ5YO0VObZPwfuMP4k2h70WXr3Fe0wGgjVF3bOTl4keMbJhohgWfQYTU9UKnPMRr00G1kf3rFY',
+//            version: '2018-11-08',
+//          },
+        },
+        allowedCardNetworks,
+        allowedCardAuthMethods,
+      },
+      transaction: {
+        totalPrice: totalPayment.toFixed(2),
+        totalPriceStatus: 'FINAL',
+        currencyCode: 'USD',
+      },
+      merchantName: 'Nimarex',
+    };
 
     const makePayment = async () => {
         // Check if Google Pay is available
         GooglePay.isReadyToPay(allowedCardNetworks, allowedCardAuthMethods)
           .then((ready) => {
-//            if (ready) {
-            console.log("Can use adnroid pay");
+            if (ready) {
+              setSubmitting(true)
+              console.log("Can use adnroid pay");
               // Request payment token
               GooglePay.requestPayment(requestData)
-                .then((token: string) => {
+                .then((response: string) => {
                   // Send a token to your payment gateway
-                  console.log(token);
+                  console.log('this is the response', response);
+                  setSubmitting(false);
                 })
                 .catch((error) => console.log(error.code, error.message));
-//            }else{
-//                console.log("Cannot use android pay");
-//            }
+            }else{
+              setSubmitting(false);
+              console.log("Cannot use android pay");
+            }
         })
       }
 
     return (
         <View style={styles.container}>
-           <Text>Testing google pay </Text>
+            {
+                 submitting == true
+                ?
+                <ActivityIndicator color="#000" size="small" />
+                :
+                <Text>Cannot use google pay </Text>
+            }
         </View>
       );
 }
