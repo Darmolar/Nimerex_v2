@@ -41,7 +41,7 @@ import GooglePaymentScreen from '../GooglePay';
 export default function MyStack() {
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="DashboardTabs" >
       <Stack.Screen name="Index" component={IndexScreen} options={{headerShown: false}} /> 
 
       <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />

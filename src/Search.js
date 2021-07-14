@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get('window');
 const  RenderProductsItem = ({ navigation, item, index}) => { 
   return (      
     <Pressable onPress={() => navigation.navigate('Product', { category: item }) }  style={styles.slideProduct} >
-        <Image source={{ uri:  live_url_image+item.images[0].url }} borderRadius={5} resizeMode="cover" style={styles.slideProductImage} />
+        <Image source={{ uri:  live_url_image+item.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
         <View style={styles.slideProductCon}>
             <Text style={styles.slideProductConTitle}>{ item.name }</Text>
             <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>       
@@ -234,31 +234,31 @@ const styles = StyleSheet.create({
   },
   slideProductImage:{
     width: '100%',
-    height: '60%',
+    height: '50%',
   },
   slideProductCon:{
     width: '100%',
-    height: "40%", 
+    height: "50%",
     alignItems: 'center',
     justifyContent: 'space-around',
   },
   slideProductConTitle:{
-    fontSize: 15,
-    fontFamily: 'Montserrat-Medium', 
+    fontSize: 12,
+    fontFamily: 'Montserrat-Regular',
     color: '#000',
+    textAlign: 'center'
   },
   slideProductConPrice:{
-    fontSize: 13,
-    fontFamily: 'Montserrat-Regular', 
+    fontSize: 12,
+    fontFamily: 'Montserrat-Light',
     color: 'blue',
   },
   slideProductConButton:{
     width: '50%',
-    height: 30,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }, 
+    height: 35,
+    color: '#fff',
+    backgroundColor: 'blue'
+  },
   slideProductConButtonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Light', 

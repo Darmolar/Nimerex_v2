@@ -23,12 +23,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5458fa27-7529-4ac3-a7e6-5a4956922ef4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Nimerex.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Nimerex.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gen/com/Nimerex/NimerexApp/BuildConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gen/com/Nimerex/NimerexApp/Manifest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gen/com/Nimerex/NimerexApp/R.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/java/com/nimerex/NimerexApp/generated/BasePackageList.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/java/com/nimerex/NimerexApp/generated/BasePackageList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Category.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Category.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GooglePay.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/GooglePay.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Network.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Network.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Payment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Product.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Product.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auth/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auth/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/Register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dummy.text" beforeDir="false" afterPath="$PROJECT_DIR$/src/dummy.text" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/Stack.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/Stack.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/TabContent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/TabContent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/profile/billing_info.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/profile/billing_info.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/profile/edit_profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/profile/edit_profile.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,10 +115,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1626088161040" />
-    <state x="-7" y="27" width="1038" height="554" key="AVDManager" timestamp="1626126879160">
+    <state x="-7" y="27" width="1038" height="492" key="AVDManager" timestamp="1626270911933">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="-7" y="27" width="1038" height="554" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1626126879160" />
+    <state x="-7" y="27" width="1038" height="492" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1626270911933" />
     <state x="-7" y="29" width="1038" height="584" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1626040351803" />
     <state x="489" y="132" key="AndroidProcessChooserDialog" timestamp="1625843388332">
       <screen x="0" y="0" width="1366" height="768" />
@@ -140,9 +153,9 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="339" y="172" width="672" height="677" key="run.anything.popup/0.0.1366.768@0.0.1366.768" timestamp="1625917627984" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1626091505755">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1626259382898">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1626091505755" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1626259382898" />
   </component>
 </project>

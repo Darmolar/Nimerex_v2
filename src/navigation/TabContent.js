@@ -8,12 +8,19 @@ import {
         DrawerItem,
     } from '@react-navigation/drawer';
 import Icon from '@expo/vector-icons/Ionicons'; 
-import { Button, TextInput, DataTable  } from 'react-native-paper'; 
+import { Button, TextInput, DataTable  } from 'react-native-paper';
+import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from '../Network';
 
 const { width, height } = Dimensions.get('window');
 
 function TabContent(props) {
-    
+
+    const logout = async () => {
+         await SecureStore.deleteItemAsync('token');
+         await SecureStore.deleteItemAsync('user_details');
+         props.navigation.navigate('Login')
+    }
+
     return (
       <DrawerContentScrollView {...props}> 
         <View style={{ width, alignItems: 'flex-end', padding: 20 }}>
@@ -54,7 +61,7 @@ function TabContent(props) {
         <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Terms & conditions</Text>
         </TouchableOpacity> 
-        <Button style={styles.logOutButton} color="#fff" onPress={() => props.navigation.navigate('Login') }>
+        <Button style={styles.logOutButton} color="#fff" onPress={() => logout() }>
             Logout
         </Button> 
       </DrawerContentScrollView>

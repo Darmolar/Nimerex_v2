@@ -2,6 +2,7 @@ import {  ToastAndroid } from "react-native";
 import * as SecureStore from 'expo-secure-store';
 const live_url = "https://www.nimerex.com/shop/api/";
 const live_url_image = "https://www.nimerex.com/shop/";
+const payment_url = "https://www.nimerex.com/nimerex/";
 
 const addToCart = async (datas) => {  
     var item  = {
@@ -80,4 +81,4 @@ const addToSavedItem = async (datas) => {
     }  
 }
 
-export { live_url, live_url_image, SecureStore, addToCart, addToSavedItem }
+export { live_url, live_url_image, SecureStore, payment_url, addToCart, addToSavedItem }

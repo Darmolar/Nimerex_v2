@@ -1,4 +1,40 @@
 
+
+//               <View style={styles.formGroup}>
+//                 <TextInput
+//                   label="Appt/Suite No"
+//                   style={{ height: 50, fontSize: 12 }}
+//                    value={userDetails.suite_no}
+//                    onChangeText={val => setUserDetails({ ...userDetails, suite_no: val }) }
+//                 />
+//               </View>
+//                <View style={styles.formGroup}>
+//                  <TextInput
+//                    label="Town"
+//                    style={{ height: 50, fontSize: 12 }}
+//                    value={userDetails.city}
+//                    onChangeText={val => setUserDetails({ ...userDetails, city: val })}
+//                  />
+//                </View>
+
+//                <View style={[styles.formGroup, { height: 150 }]}>
+//                     <TextInput
+//                       label="Street Address"
+//                       multiline={true}
+//                       style={{ height: 150, fontSize: 12 }}
+//                       value={userDetails.address}
+//                       onChangeText={val => setUserDetails({ ...userDetails, address: val })}
+//                     />
+//                </View>
+
+
+
+
+
+
+
+
+
             <View style={styles.productListCon}>
               <Text style={styles.productListConTitle}>Top Selling</Text>
               <ScrollView style={styles.productListConSlides} horizontal showsHorizontalScrollIndicator={false} >

@@ -14,12 +14,8 @@ export default function LoginScreen({ navigation }) {
   const [visible, setVisible] = React.useState(false); 
   const [ message, setMessage ] = useState('');
   const [ userDetails, setUserDetails ] = useState({
-                                                    first_name: '',
-                                                    last_name: '',
                                                     email: '',
                                                     password: '',
-                                                    dob: '',
-                                                    country: '',
                                                 });
  
   const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
@@ -30,34 +26,33 @@ export default function LoginScreen({ navigation }) {
           setVisible(true);
           return false;
     }else{
-      navigation.navigate('DashboardTabs', { screen: 'Home' })
-      // setSubmitting(true);
-      // console.log(userDetails);
-      // var new_data = new FormData; 
-      // new_data.append('email', userDetails.email);  
-      // new_data.append('password', userDetails.password); 
-      // console.log(new_data);
-      // fetch(`${live_url}auth/login`,{
-      //       method: 'POST',
-      //       headers: {
-      //         Accept: 'application/json',
-      //         'Content-Type': 'multipart/form-data'
-      //       },
-      //       body: new_data
-      //     })
-      // .then(response => response.json())
-      // .then(async(json) => {
-      //   console.log(json);
-      //   // if(json.responseCode == "00"){ 
-      //   //   await SecureStore.setItemAsync('user_details', JSON.stringify(json));        
-      //   // navigation.navigate('DashboardTabs', { screen: 'Home' })
-      //   // }else{
-      //   //   setMessage(json.responseMessage); 
-      //   //   setVisible(true)
-      //   // }
-      // })
-      // .catch(error => console.error(error))
-      // .finally(res => setSubmitting(false)) 
+       setSubmitting(true);
+       console.log(userDetails);
+       var new_data = new FormData;
+       new_data.append('email', userDetails.email);
+       new_data.append('password', userDetails.password);
+       fetch(`${live_url}auth/login`,{
+             method: 'POST',
+             headers: {
+               Accept: 'application/json',
+               'Content-Type': 'multipart/form-data'
+             },
+             body: new_data
+           })
+       .then(response => response.json())
+       .then(async(json) => {
+         console.log(json);
+          if(json.status == true){
+            await SecureStore.setItemAsync('user_details', JSON.stringify(json.data.user_details));
+            await SecureStore.setItemAsync('token', json.data.token);
+            navigation.navigate('DashboardTabs', { screen: 'Home' })
+          }else{
+            setMessage(json.responseMessage);
+            setVisible(true)
+          }
+       })
+       .catch(error => console.error(error))
+       .finally(res => setSubmitting(false))
     }
   }
 

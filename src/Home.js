@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, ImageBackground, Image, ScrollView, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, ImageBackground, Image, ScrollView, Alert, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons'; 
 import { Button, TextInput, Snackbar } from 'react-native-paper';    
@@ -36,11 +36,37 @@ export default function HomeScreen({ navigation }) {
   const [ userDetails, setUserDetails ] = useState({});
   const [ allProducts, setAllProducts ] = useState([]);
 
+
   useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+
+              // Prevent default behavior of leaving the screen
+              e.preventDefault();
+
+              // Prompt the user before leaving the screen
+              Alert.alert(
+                'Log out',
+                'Are you sure you want to logout?',
+                [
+                  { text: "Don't leave", style: 'cancel', onPress: () => {} },
+                  {
+                    text: 'Logout',
+                    style: 'destructive',
+                    // If the user confirmed, then we dispatch the action we blocked earlier
+                    // This will continue the action that had triggered the removal of the screen
+                    onPress: async () =>{
+                        await SecureStore.deleteItemAsync('user_details');
+                        await SecureStore.deleteItemAsync('token');
+                        navigation.navigate('Login');
+                    },
+                  },
+                ]
+              );
+            });
     setLoading(true);
     getAllProducts();
   }, [])
- 
+
   const getAllProducts = async () => {
     setLoading(true);
     fetch(`${live_url}product` )
@@ -119,7 +145,7 @@ export default function HomeScreen({ navigation }) {
                             }
                             return (
                                 <Pressable onPress={() => navigation.navigate('Product', { category: item2 }) } style={styles.slideProduct} key={index2}>
-                                    <Image source={{ uri:  live_url_image+item2.images[0].url }} borderRadius={5} resizeMode="cover" style={styles.slideProductImage} />
+                                    <Image source={{ uri:  live_url_image+item2.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
                                     <View style={styles.slideProductCon}>
                                       <Text style={styles.slideProductConTitle}>{ item2.name }</Text>
                                       <Text style={styles.slideProductConPrice}>{'\u0024'}{ item2.price }</Text> 
@@ -219,27 +245,28 @@ const styles = StyleSheet.create({
   },
   slideProductImage:{
     width: '100%',
-    height: '60%',
+    height: '50%',
   },
   slideProductCon:{
     width: '100%',
-    height: "40%", 
+    height: "50%",
     alignItems: 'center',
     justifyContent: 'space-around',
   },
   slideProductConTitle:{
-    fontSize: 13,
-    fontFamily: 'Montserrat-Medium', 
+    fontSize: 12,
+    fontFamily: 'Montserrat-Regular',
     color: '#000',
+    textAlign: 'center'
   },
   slideProductConPrice:{
     fontSize: 12,
-    fontFamily: 'Montserrat-Regular', 
+    fontFamily: 'Montserrat-Light',
     color: 'blue',
   },
   slideProductConButton:{
     width: '50%',
-    height: 30, 
+    height: 35,
     color: '#fff',
     backgroundColor: 'blue'
   },  

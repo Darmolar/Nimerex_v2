@@ -3,12 +3,13 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, Alert, View, Dimensions, Image, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
-import { Button, TextInput, Snackbar  } from 'react-native-paper';
-import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
 import { GooglePay } from 'react-native-google-pay';
+import base64 from 'react-native-base64'
+import { Button, TextInput, Snackbar } from 'react-native-paper';
+import { live_url, payment_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
 
 const { width, height } = Dimensions.get('window');
-const allowedCardNetworks = ['VISA', 'MASTERCARD'];
+const allowedCardNetworks = ['VISA', 'MASTERCARD', 'AMEX', 'DISCOVER', 'INTERAC', 'JCB'];
 const allowedCardAuthMethods = ['PAN_ONLY', 'CRYPTOGRAM_3DS'];
 
 // Set the environment before the payment request
@@ -18,36 +19,45 @@ export default function makePayment({ navigation, route }){
     const [ email, setEmail ] = useState('');
     const { totalPayment, carts, fax } = route.params;
     const [ userDetails, setUserDetails ] = useState({
-                                                    first_name: '',
-                                                    last_name: '',
+                                                    firstname: '',
+                                                    lastname: '',
                                                     email: '',
                                                     password: '',
                                                     dob: '',
                                                     country: '',
+                                                    telephone: '',
                                                 });
     const [ visible, setVisible ] = React.useState(false);
     const [ message, setMessage ] = useState('');
     const [ submitting, setSubmitting ] = useState(false);
     const [ canUse, setCanUse ] = useState(false);
-
     const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
 
     useEffect(()=>{
-       setSubmitting(true)
-       makePayment();
+       setSubmitting(true);
+       getUserDetails();
     },[])
+
+    const getUserDetails = async () => {
+     let token = await SecureStore.getItemAsync('token');
+     if(token !== null){
+        let data = await SecureStore.getItemAsync('user_details');
+        if(data !== null){
+           var userDetail = JSON.parse(data);
+           setUserDetails(userDetail);
+           makePayment(userDetail.id);
+        }
+     }else{
+         navigation.navigate('Login')
+     }
+   }
 
     const requestData = {
       cardPaymentMethod: {
         tokenizationSpecification: {
           type: 'PAYMENT_GATEWAY',
-          // stripe (see Example):
           gateway: 'authorizenet',
           gatewayMerchantId: '743444',
-//          stripe: {
-//            publishableKey: 'pk_test_51HFTeDDTsjZr0XgPcARyAbLibQ5YO0VObZPwfuMP4k2h70WXr3Fe0wGgjVF3bOTl4keMbJhohgWfQYTU9UKnPMRr00G1kf3rFY',
-//            version: '2018-11-08',
-//          },
         },
         allowedCardNetworks,
         allowedCardAuthMethods,
@@ -57,10 +67,9 @@ export default function makePayment({ navigation, route }){
         totalPriceStatus: 'FINAL',
         currencyCode: 'USD',
       },
-      merchantName: 'Nimarex',
     };
 
-    const makePayment = async () => {
+    const makePayment = async (user_id) => {
         // Check if Google Pay is available
         GooglePay.isReadyToPay(allowedCardNetworks, allowedCardAuthMethods)
           .then((ready) => {
@@ -69,12 +78,43 @@ export default function makePayment({ navigation, route }){
               console.log("Can use adnroid pay");
               // Request payment token
               GooglePay.requestPayment(requestData)
-                .then((response: string) => {
+                .then((response) => {
                   // Send a token to your payment gateway
                   console.log('this is the response', response);
-                  setSubmitting(false);
+                  var paymentDatas = base64.encode(response);
+                  var new_payment_data = new FormData;
+                  new_payment_data.append('amount', totalPayment.toFixed(2));
+                  new_payment_data.append('user_id', user_id);
+                  new_payment_data.append('descriptor', 'COMMON.GOOGLE.INAPP.PAYMENT');
+                  new_payment_data.append('payment_token', paymentDatas);
+                  new_payment_data.append('sandbox', true);
+                  console.log(new_payment_data);
+                  console.log('Payment Data', requestData)
+                  setSubmitting(true);
+                    fetch(`${payment_url}rest/Authorize_Net/verifyMobilePayment`,{
+                     method: 'POST',
+                     headers: {
+                       Accept: 'application/json',
+                       'Content-Type': 'multipart/form-data'
+                     },
+                     body: new_payment_data
+                    } )
+                      .then(response => response.json())
+                      .then((json) => {
+                        console.log(json);
+                        if(json.success == true ){
+                          // console.log(json.data);
+                          setAllProducts(json.data);
+                        }else{
+                           setMessage(json.errors.error_message);
+                           setVisible(true);
+                        }
+                      })
+                      .catch(error => console.error(error))
+                      .finally(res => setSubmitting(false))
                 })
-                .catch((error) => console.log(error.code, error.message));
+                .catch((error) => console.log(error.code, error.message))
+                .finally(() => setSubmitting(false) );
             }else{
               setSubmitting(false);
               console.log("Cannot use android pay");
@@ -94,7 +134,6 @@ export default function makePayment({ navigation, route }){
         </View>
       );
 }
-
 
 const styles = StyleSheet.create({
   container: {

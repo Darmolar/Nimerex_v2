@@ -14,37 +14,41 @@ export default function RegisterScreen({ navigation }) {
   const [visible, setVisible] = React.useState(false); 
   const [ message, setMessage ] = useState('');
   const [ userDetails, setUserDetails ] = useState({
-                                                    first_name: '',
-                                                    last_name: '',
+                                                    firstname: '',
+                                                    lastname: '',
                                                     email: '',
                                                     password: '',
                                                     dob: '',
                                                     country: '',
+                                                    telephone: '',
+                                                    username: ''
                                                 });
  
   const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
   const register = async () => {
-    if(userDetails.first_name == "" || 
-        userDetails.last_name == "" || 
+    if(userDetails.firstname == "" ||
+        userDetails.lastname == "" ||
         userDetails.email == "" || 
         userDetails.password == "" || 
-        userDetails.dob == "" || 
+        userDetails.dob == "" ||
+        userDetails.telephone == "" ||
         userDetails.country == "" ){
           setMessage('All feilds are required');
           setVisible(true);
           return false;
     }else{
       setSubmitting(true);
-      console.log(userDetails);
       var new_data = new FormData;
       new_data.append('country', userDetails.country);
       new_data.append('dob', userDetails.dob);
       new_data.append('email', userDetails.email);
-      new_data.append('first_name', userDetails.first_name);
-      new_data.append('last_name', userDetails.last_name);
-      new_data.append('password', userDetails.password); 
+      new_data.append('firstname', userDetails.firstname);
+      new_data.append('lastname', userDetails.lastname);
+      new_data.append('password', userDetails.password);
+      new_data.append('telephone', userDetails.telephone);
+      new_data.append('username', userDetails.firstname);
       console.log(new_data);
-      fetch(`${live_url}register`,{
+      fetch(`${live_url}auth/register`,{
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -55,13 +59,16 @@ export default function RegisterScreen({ navigation }) {
       .then(response => response.json())
       .then(async(json) => {
         console.log(json);
-        // if(json.responseCode == "00"){ 
-        //   await SecureStore.setItemAsync('user_details', JSON.stringify(json));        
-        // navigation.navigate('DashboardTabs', { screen: 'Home' })
-        // }else{
-        //   setMessage(json.responseMessage); 
-        //   setVisible(true)
-        // }
+         if(json.status == true){
+           setMessage(json.message);
+           setVisible(true)
+            await SecureStore.setItemAsync('user_details', JSON.stringify(json.data.user_details));
+            await SecureStore.setItemAsync('token', json.data.token);
+            navigation.navigate('DashboardTabs', { screen: 'Home' })
+         }else{
+           setMessage(json.message);
+           setVisible(true)
+         }
       })
       .catch(error => console.error(error))
       .finally(res => setSubmitting(false)) 
@@ -84,7 +91,7 @@ export default function RegisterScreen({ navigation }) {
                   label="First Name"
                   style={{ height: 50, fontSize: 12, fontFamily: 'Montserrat-Bold'}}
                   value={userDetails.first_name}
-                  onChangeText={val => setUserDetails({ ...userDetails, first_name: val })}
+                  onChangeText={val => setUserDetails({ ...userDetails, firstname: val })}
                 />
             </View>
             <View style={styles.formGroup}>
@@ -93,7 +100,7 @@ export default function RegisterScreen({ navigation }) {
                   label="Last Name"
                   style={{ height: 50, fontSize: 12, fontFamily: 'Montserrat-Bold',}}
                   value={userDetails.last_name}
-                  onChangeText={val => setUserDetails({ ...userDetails, last_name: val })}
+                  onChangeText={val => setUserDetails({ ...userDetails, lastname: val })}
                 />
             </View>
             <View style={styles.formGroup}>
@@ -102,6 +109,8 @@ export default function RegisterScreen({ navigation }) {
                   label="Telephone"
                   keyboardType="number-pad"
                   style={{ height: 50, fontSize: 12, fontFamily: 'Montserrat-Bold',}}
+                  value={userDetails.telephone}
+                  onChangeText={val => setUserDetails({ ...userDetails, telephone: val })}
                 />
             </View>
             <View style={styles.formGroup}>

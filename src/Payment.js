@@ -14,9 +14,22 @@ export default function PaymentScreen({ navigation, route }) {
   const [ loading, setLoading ] = useState(true);
   const [ cartTotal, setCartTotal ] = useState(0);
   const [ fax, setFax ] = useState(0);
+  const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+  const [ userDetails, setUserDetails ] = useState({});
+  const [ billingInfo, setBillingInfo ] = useState({
+                                                    phone: '',
+                                                    email: '',
+                                                    suburb_or_town: '',
+                                                    state_or_territory: '',
+                                                    country: '',
+                                                    post_code: '',
+                                                    full_address: '',
+                                                    suite_no: '',
+                                                  });
 
   useEffect(() => {
     getFaxs();
+    getUserDetails();
     (()=>{
       var total = 0;
       carts.map((item, index) => {
@@ -24,7 +37,21 @@ export default function PaymentScreen({ navigation, route }) {
       })
       setCartTotal(total);
     })()
-  },[navigation])
+  },[navigation]);
+
+  const getUserDetails = async () => {
+     let token = await SecureStore.getItemAsync('token');
+     if(token !== null){
+        setIsLoggedIn(true);
+        let data = await SecureStore.getItemAsync('user_details');
+        if(data !== null){
+           setUserDetails(JSON.parse(data));
+           getBillingInfo(JSON.parse(data).id)
+        }
+     }else{
+        setIsLoggedIn(false)
+     }
+   }
 
   const getFaxs = async () => {
     setLoading(true);
@@ -43,6 +70,29 @@ export default function PaymentScreen({ navigation, route }) {
       .finally(res => setLoading(false))
   }
 
+  const getBillingInfo = async (user_id) => {
+        setLoading(true);
+        fetch(`${live_url}address/find/${user_id}` )
+          .then(response => response.json())
+          .then(async(json) => {
+            console.log(json);
+            if(json.status == true ){
+                setBillingInfo({
+                               phone: json.data.phone,
+                               email: json.data.email,
+                               suburb_or_town: json.data.suburb_or_town,
+                               state_or_territory: json.data.state_or_territory,
+                               country: json.data.country,
+                               post_code: json.data.post_code,
+                               full_address: json.data.full_address,
+                               suite_no: json.data.suite_no,
+                             });
+            }
+          })
+          .catch(error => console.error(error))
+          .finally(res => setLoading(false))
+   }
+
   if(loading){
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -59,64 +109,139 @@ export default function PaymentScreen({ navigation, route }) {
           <Text style={styles.headerText}>Payment</Text> 
           <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} />
         </View>
-        <View style={styles.body}>
-            <View style={styles.cartCon}>
-                <DataTable>
-                  {/* <DataTable.Header>
-                      <DataTable.Title>Total Cart</DataTable.Title>
-                      <DataTable.Title numeric>Price</DataTable.Title>  
-                  </DataTable.Header> */}
-      
-                  <DataTable.Row>
-                      <DataTable.Cell>
-                      <Text style={styles.itemTitle}>Total Price</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{'\u0024'}{ cartTotal.toFixed(2) }</DataTable.Cell>
-                  </DataTable.Row>
-                  
-                  {/* <DataTable.Row>
-                      <DataTable.Cell>
-                      <Text style={styles.itemTitle}>Vat</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{'\u0024'}30</DataTable.Cell>
-                  </DataTable.Row> */}
-                  
-                  <DataTable.Row>
-                      <DataTable.Cell>
-                      <Text style={styles.itemTitle}>Fax</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{'\u0024'} { ((Number(fax)/ 100) * Number(cartTotal)).toFixed(2) } </DataTable.Cell>
-                  </DataTable.Row> 
-                  
-                  <DataTable.Row>
-                      <DataTable.Cell>
-                      <Text style={styles.itemTitle}>Toatl Payable</Text>
-                      </DataTable.Cell>
-                      <DataTable.Cell numeric>{'\u0024'}{ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</DataTable.Cell>
-                  </DataTable.Row> 
+        <ScrollView style={styles.body}>
+            {
+            isLoggedIn == true ?
+                <>
+                    <View style={styles.billingCon}>
+                        <View style={{ alignSelf: 'center', width: '95%', flexDirection: 'row', justifyContent: 'space-between', }}>
+                            <Text style={{ height: 50, fontSize: 15, color: '#000', fontFamily: 'Montserrat-Regular' }}>Shipping Information</Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('BillingInfo')}  >
+                                <Text style={{ height: 50, fontSize: 12, color: '#b22234', fontFamily: 'Montserrat-Bold' }}>Update</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {
+                            (billingInfo.phone !== '' ||
+                            billingInfo.email !== '' ||
+                            billingInfo.suburb_or_town !== '' ||
+                            billingInfo.state_or_territory !== '' ||
+                            billingInfo.post_code !== '' ||
+                            billingInfo.full_address !== '' ||
+                            billingInfo.suite_no !== '' )
+                            ?
+                            <View style={{ width: '100%'}}>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Email</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.email }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Phone</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.phone }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Suite No</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.suite_no }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Town</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.suburb_or_town }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>State</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.state_or_territory }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Country</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.country }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Post Code</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell numeric>{ billingInfo.post_code }</DataTable.Cell>
+                                </DataTable.Row>
+                                <DataTable.Row>
+                                  <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>Full Address</Text>
+                                  </DataTable.Cell>
+                                  <DataTable.Cell >{ billingInfo.full_address }</DataTable.Cell>
+                                </DataTable.Row>
+                            </View>
+                            :
+                            <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
+                                <Button mode="contained" color="#b22234" style={styles.button} onPress={() => navigation.navigate('BillingInfo') } >
+                                    Update Billing Info
+                                </Button>
+                            </View>
+                        }
+                    </View>
+                    <View style={styles.cartCon}>
+                        <DataTable>
+                          <DataTable.Row>
+                              <DataTable.Cell>
+                              <Text style={styles.itemTitle}>Total Price</Text>
+                              </DataTable.Cell>
+                              <DataTable.Cell numeric>{'\u0024'}{ cartTotal.toFixed(2) }</DataTable.Cell>
+                          </DataTable.Row>
 
-                </DataTable> 
-                {/* <Text style={{ fontSize: 15, fontFamily: 'Montserrat-Regular', color: '#000', textAlign: 'center', top: 10 }}>Select payment mode</Text>
-                <Animatable.View animation="zoomInDown" style={styles.butonBottom}>
-                    <TouchableOpacity onPress={() => setPaymentMode('card') } style={ paymentMode == 'card' ? [styles.button2, { backgroundColor: '#fff', borderRadius: 5 }] : styles.button2 }> 
-                    <Text style={ paymentMode == 'card' ? styles.button2Text : [styles.button2Text, { color: '#fff' }] }>Card</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity  onPress={() => setPaymentMode('paypal') } style={ paymentMode == 'paypal' ? [styles.button2, { backgroundColor: '#fff', borderRadius: 5 }] : styles.button2 }> 
-                    <Text style={ paymentMode == 'paypal' ? styles.button2Text : [styles.button2Text, { color: '#fff' }] }>Paypal</Text>
-                    </TouchableOpacity>
-                </Animatable.View> */}
-            </View> 
-            <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>                  
-                <Button mode="contained" color="#b22234" style={styles.button} onPress={() => navigation.navigate('GooglePayment', {
-                                                                                                                                      totalPayment: cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
-                                                                                                                                      carts: carts,
-                                                                                                                                      fax:fax
-                                                                                                                                    }) 
-                                                                                                                                  } >
-                    Confirm payment
+                          <DataTable.Row>
+                              <DataTable.Cell>
+                              <Text style={styles.itemTitle}>Fax</Text>
+                              </DataTable.Cell>
+                              <DataTable.Cell numeric>{'\u0024'} { ((Number(fax)/ 100) * Number(cartTotal)).toFixed(2) } </DataTable.Cell>
+                          </DataTable.Row>
+
+                          <DataTable.Row>
+                              <DataTable.Cell>
+                              <Text style={styles.itemTitle}>Toatl Payable</Text>
+                              </DataTable.Cell>
+                              <DataTable.Cell numeric>{'\u0024'}{ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</DataTable.Cell>
+                          </DataTable.Row>
+
+                        </DataTable>
+                    </View>
+                    <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
+                        <Button disabled={billingInfo.phone === '' ||
+                                          billingInfo.email === '' ||
+                                          billingInfo.suburb_or_town === '' ||
+                                          billingInfo.state_or_territory === '' ||
+                                          billingInfo.post_code === '' ||
+                                          billingInfo.full_address === '' ||
+                                          billingInfo.suite_no === '' }
+                                  mode="contained"
+                                  color="#b22234"
+                                  style={styles.button}
+                                  onPress={() => navigation.navigate('GooglePayment', {
+                                                                      totalPayment: cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                      carts: carts,
+                                                                      fax:fax
+                                                                    })
+                                                                  } >
+                            Confirm payment
+                        </Button>
+                    </View>
+                </>
+            :
+            <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
+                <Button mode="contained" color="#b22234" style={styles.button}
+                    onPress={() => navigation.navigate('Login') } >
+                    Login before checkout
                 </Button>
             </View>
-        </View>
+        }
+        </ScrollView>
     </View>
   );
 }
@@ -175,5 +300,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Montserrat-Bold',
     color: '#000'
+  },
+  billingCon:{
+    width,
+    padding: 20,
   }
 });
