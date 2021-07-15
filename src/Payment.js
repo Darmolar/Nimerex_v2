@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
-import { Button, TextInput, DataTable  } from 'react-native-paper'; 
+import { Button, TextInput, DataTable, RadioButton   } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
 
@@ -26,8 +26,12 @@ export default function PaymentScreen({ navigation, route }) {
                                                     full_address: '',
                                                     suite_no: '',
                                                   });
+  const [ checked, setChecked ] = React.useState('card');
+  const [ orders, setOrder ] = useState({});
+  const [ shippingInfo, setShippingInfo ] = useState(0);
 
   useEffect(() => {
+    getShippingOptions();
     getFaxs();
     getUserDetails();
     (()=>{
@@ -36,7 +40,7 @@ export default function PaymentScreen({ navigation, route }) {
         total += item.price * item.qty
       })
       setCartTotal(total);
-    })()
+    })();
   },[navigation]);
 
   const getUserDetails = async () => {
@@ -58,39 +62,91 @@ export default function PaymentScreen({ navigation, route }) {
     fetch(`${live_url}tax` )
       .then(response => response.json())
       .then(async(json) => {
-        console.log(json);
         if(json['status'] == true ){  
           setFax(json.data); 
-        }else{
-          // setMessage(json.responseMessage); 
-          // setVisible(true)
         }
       })
       .catch(error => console.error(error))
-      .finally(res => setLoading(false))
+      .finally(res => console.log() )
+  }
+
+  const getShippingOptions = async () => {
+      var item_data = new Object();
+      const promises = carts.map(async (item, index) => {
+                            var id = Math.random().toString(36).substring(1, 20);
+                           await fetch(`${live_url}product/find/${item.id}` )
+                             .then(response => response.json())
+                             .then(async(json) => {
+                               if(json.status == true ){
+                                 var new_item = {
+                                       "rowId": id,
+                                       "id": json.data.products.id,
+                                       "name": json.data.products.name,
+                                       "qty": item.qty,
+                                       "price": json.data.products.price,
+                                       "options": {
+                                         "shop_id": json.data.products.shop_id,
+                                         "weight": json.data.products.item_weight,
+                                         "category_id": json.data.products.category_id,
+                                         "attribute_key": "",
+                                         "attribute_value": ""
+                                       }
+                                     }
+                                 item_data[id] = new_item;
+                                 return item_data;
+                               }
+                             })
+                             .catch(error => console.error(error))
+                           })
+      const is_done_data = await Promise.all(promises);
+      if(is_done_data){
+          setOrder(item_data);
+          var shipping_data = {
+            'user_id': userDetails.id,
+            'items': item_data,
+          }
+          setLoading(true);
+          fetch(`${live_url}checkout/shipping` ,{
+             method: 'POST',
+             headers: {
+               Accept: 'application/json',
+               'Content-Type': 'application/json'
+             },
+             body: JSON.stringify(shipping_data)
+          })
+           .then(response => response.json())
+           .then(json => {
+             setLoading(true);
+             if(json.status == true ){
+                setShippingInfo(json.data.foreign_shipping.cost);
+                console.log(json.data.foreign_shipping.cost)
+             }
+           })
+           .catch(error => console.error(error))
+           .finally(() => setLoading(false));
+      }
   }
 
   const getBillingInfo = async (user_id) => {
-        setLoading(true);
-        fetch(`${live_url}address/find/${user_id}` )
-          .then(response => response.json())
-          .then(async(json) => {
-            console.log(json);
-            if(json.status == true ){
-                setBillingInfo({
-                               phone: json.data.phone,
-                               email: json.data.email,
-                               suburb_or_town: json.data.suburb_or_town,
-                               state_or_territory: json.data.state_or_territory,
-                               country: json.data.country,
-                               post_code: json.data.post_code,
-                               full_address: json.data.full_address,
-                               suite_no: json.data.suite_no,
-                             });
-            }
-          })
-          .catch(error => console.error(error))
-          .finally(res => setLoading(false))
+    setLoading(true);
+    fetch(`${live_url}address/find/${user_id}` )
+      .then(response => response.json())
+      .then(async(json) => {
+        if(json.status == true ){
+            setBillingInfo({
+                           phone: json.data.phone,
+                           email: json.data.email,
+                           suburb_or_town: json.data.suburb_or_town,
+                           state_or_territory: json.data.state_or_territory,
+                           country: json.data.country,
+                           post_code: json.data.post_code,
+                           full_address: json.data.full_address,
+                           suite_no: json.data.suite_no,
+                         });
+        }
+      })
+      .catch(error => console.error(error))
+      .finally(res => console.log())
    }
 
   if(loading){
@@ -191,55 +247,108 @@ export default function PaymentScreen({ navigation, route }) {
                         <DataTable>
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Total Price</Text>
+                              <Text style={styles.itemTitle}>Sub Total</Text>
                               </DataTable.Cell>
                               <DataTable.Cell numeric>{'\u0024'}{ cartTotal.toFixed(2) }</DataTable.Cell>
                           </DataTable.Row>
 
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Fax</Text>
+                              <Text style={styles.itemTitle}>Tax</Text>
                               </DataTable.Cell>
                               <DataTable.Cell numeric>{'\u0024'} { ((Number(fax)/ 100) * Number(cartTotal)).toFixed(2) } </DataTable.Cell>
                           </DataTable.Row>
 
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Toatl Payable</Text>
+                              <Text style={styles.itemTitle}>Shipping Address</Text>
                               </DataTable.Cell>
-                              <DataTable.Cell numeric>{'\u0024'}{ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</DataTable.Cell>
+                              <DataTable.Cell numeric>{'\u0024'} { shippingInfo.toFixed(2)  } </DataTable.Cell>
                           </DataTable.Row>
 
+                          <DataTable.Row>
+                              <DataTable.Cell>
+                                <Text style={[styles.itemTitle, { color: '#b22234', fontFamily: 'Montserrat-Medium' }]}>Total Payable</Text>
+                              </DataTable.Cell>
+                              <DataTable.Cell numeric>
+                                <Text style={{ color: '#b22234', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
+                              </DataTable.Cell>
+                          </DataTable.Row>
                         </DataTable>
                     </View>
+                    <View style={{ width: '95%', alignSelf: 'center', marginVertical: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                       <Text style={{ width: '45%', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                           <RadioButton
+                              color="#b22234"
+                              value="card"
+                              status={ checked === 'card' ? 'checked' : 'unchecked' }
+                              onPress={() => setChecked('card')}
+                            />
+                            Card Payment
+                       </Text>
+                       <Text style={{ width: '45%', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                           <RadioButton
+                               color="#b22234"
+                               value="googlePay"
+                               status={ checked === 'googlePay' ? 'checked' : 'unchecked' }
+                               onPress={() => setChecked('googlePay')}
+                             />
+                             Google Pay
+                       </Text>
+                    </View>
                     <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                        <Button disabled={billingInfo.phone === '' ||
-                                          billingInfo.email === '' ||
-                                          billingInfo.suburb_or_town === '' ||
-                                          billingInfo.state_or_territory === '' ||
-                                          billingInfo.post_code === '' ||
-                                          billingInfo.full_address === '' ||
-                                          billingInfo.suite_no === '' }
-                                  mode="contained"
-                                  color="#b22234"
-                                  style={styles.button}
-                                  onPress={() => navigation.navigate('GooglePayment', {
-                                                                      totalPayment: cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
-                                                                      carts: carts,
-                                                                      fax:fax
-                                                                    })
-                                                                  } >
-                            Confirm payment
-                        </Button>
+                        {
+                            checked === 'card'
+                            ?
+                                <Button disabled={billingInfo.phone === '' ||
+                                                  billingInfo.email === '' ||
+                                                  billingInfo.suburb_or_town === '' ||
+                                                  billingInfo.state_or_territory === '' ||
+                                                  billingInfo.post_code === '' ||
+                                                  billingInfo.full_address === '' ||
+                                                  billingInfo.suite_no === '' }
+                                          mode="contained"
+                                          color="#b22234"
+                                          style={styles.button}
+                                          onPress={() => navigation.navigate('makeCardPayment', {
+                                                                              totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                              carts: carts,
+                                                                              fax:fax
+                                                                            })
+                                                                          } >
+                                    Confirm payment
+                                </Button>
+                            :
+                                <Button disabled={billingInfo.phone === '' ||
+                                                  billingInfo.email === '' ||
+                                                  billingInfo.suburb_or_town === '' ||
+                                                  billingInfo.state_or_territory === '' ||
+                                                  billingInfo.post_code === '' ||
+                                                  billingInfo.full_address === '' ||
+                                                  billingInfo.suite_no === '' }
+                                          mode="contained"
+                                          color="#b22234"
+                                          style={styles.button}
+                                          onPress={() => navigation.navigate('GooglePayment', {
+                                                                              totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                              carts: carts,
+                                                                              fax:fax
+                                                                            })
+                                                                          } >
+                                    Confirm payment
+                                </Button>
+                        }
                     </View>
                 </>
             :
-            <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                <Button mode="contained" color="#b22234" style={styles.button}
-                    onPress={() => navigation.navigate('Login') } >
-                    Login before checkout
-                </Button>
-            </View>
+            <>
+                <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
+                    <Button mode="contained" color="#b22234" style={styles.button}
+                        onPress={() => navigation.navigate('Login') } >
+                        Login before checkout
+                    </Button>
+                </View>
+            </>
         }
         </ScrollView>
     </View>

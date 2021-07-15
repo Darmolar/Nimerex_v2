@@ -11,17 +11,25 @@ const { width, height } = Dimensions.get('window');
 export default function CartScreen({ navigation }) { 
   const [ carts, setCarts ] = useState([]);
   const [ loading, setLoading ] = useState(false);
+  const [ cartTotal, setCartTotal ] = useState(0);
+  const [ fax, setFax ] = useState(0);
 
   useEffect(() => {
-    getCarts();
+      const unsubscribe = navigation.addListener('focus', () => {
+            getCarts();
+            getFaxs();
+      });
+
+      // Return the function to unsubscribe from the event so it gets removed on unmount
+      return unsubscribe;
   },[navigation])
  
   const getCarts = async () => {
     setLoading(true);
     var cart_data = await SecureStore.getItemAsync('cart_item_item')
     if(cart_data !== null){
-      console.log(JSON.parse(cart_data))
       setCarts(JSON.parse(cart_data));
+      getTotalInfo(JSON.parse(cart_data));
     }else{
       setCarts([]);
     }
@@ -36,7 +44,8 @@ export default function CartScreen({ navigation }) {
             if (cart.id === p.id) return cart; 
             return p;
         });
-        setCarts(updatedcart); 
+        setCarts(updatedcart);
+        getTotalInfo(updatedcart);
     } 
   }
   
@@ -48,12 +57,38 @@ export default function CartScreen({ navigation }) {
         return p;
     });
     setCarts(updatedcart);
+    getTotalInfo(updatedcart);
   }
 
-  const removeItem = (item, index) => {   
+  const removeItem = async (item, index) => {
     let cart = carts.find((pr) => pr.id === item.id); 
     const updatedcart = carts.filter(p =>  item.id !== p.id );
     setCarts(updatedcart);
+    getTotalInfo(updatedcart);
+    await SecureStore.deleteItemAsync('cart_item_item')
+    await SecureStore.setItemAsync('cart_item_item', JSON.stringify(updatedcart));
+    getCarts()
+  }
+
+  const getFaxs = async () => {
+    setLoading(true);
+    fetch(`${live_url}tax` )
+      .then(response => response.json())
+      .then(async(json) => {
+        if(json['status'] == true ){
+          setFax(json.data);
+        }
+      })
+      .catch(error => console.error(error))
+      .finally(res => setLoading(false))
+  }
+
+  const getTotalInfo = (item) => {
+      var total = 0;
+        item.map((item, index) => {
+          total += item.price * item.qty
+        })
+        setCartTotal(total);
   }
 
   if(loading){
@@ -72,17 +107,16 @@ export default function CartScreen({ navigation }) {
           <Text style={styles.headerText}>Cart</Text> 
           <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} />
         </View>
-        <View style={styles.body}>
+        <ScrollView style={styles.body}>
 
           <View style={styles.cartCon}>
             <DataTable>
               <DataTable.Header>
                 <DataTable.Title>Item</DataTable.Title>
                 <DataTable.Title >Price</DataTable.Title>
-                <DataTable.Title >Quantitiy</DataTable.Title>
+                <DataTable.Title numeric>Quantitiy</DataTable.Title>
                 <DataTable.Title numeric>Action</DataTable.Title>
               </DataTable.Header>
-
               {
                 carts.length > 0 &&
                 carts.map((item, index) => {
@@ -92,7 +126,7 @@ export default function CartScreen({ navigation }) {
                         <Text style={styles.itemTitle}>{ item.name }</Text>
                       </DataTable.Cell>
                       <DataTable.Cell >{'\u0024'}{ item.price }</DataTable.Cell>
-                      <DataTable.Cell>
+                      <DataTable.Cell numeric>
                         <View style={styles.quantityCon}>
                           <View style={styles.quantityConLeft}>
                             <TouchableOpacity style={styles.quantityButton} onPress={() => removeToQuantity(item, index) }>
@@ -124,18 +158,43 @@ export default function CartScreen({ navigation }) {
       
                   )
                 })
-              }  
-
-
+              }
             </DataTable>
+            <View style={[styles.cartCon, { marginTop: 20 }]}>
+                <DataTable>
+                  <DataTable.Row>
+                      <DataTable.Cell>
+                      <Text style={styles.itemTitle}>Sub Total</Text>
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>{'\u0024'}{ cartTotal.toFixed(2) }</DataTable.Cell>
+                  </DataTable.Row>
+
+                  <DataTable.Row>
+                      <DataTable.Cell>
+                      <Text style={styles.itemTitle}>Tax</Text>
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>{'\u0024'} { ((Number(fax)/ 100) * Number(cartTotal)).toFixed(2) } </DataTable.Cell>
+                  </DataTable.Row>
+
+                  <DataTable.Row>
+                      <DataTable.Cell>
+                        <Text style={[styles.itemTitle, { color: '#b22234', fontFamily: 'Montserrat-Medium' }]}>Total Payable</Text>
+                      </DataTable.Cell>
+                      <DataTable.Cell numeric>
+                        <Text style={{ color: '#b22234', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
+                      </DataTable.Cell>
+                  </DataTable.Row>
+
+                </DataTable>
+            </View>
           </View>
           
-          <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>                  
+            <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
                 <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Payment', { carts })} >
                     Proceed to payment
                 </Button>
             </View>
-        </View>
+        </ScrollView>
     </View>
   );
 }
@@ -181,9 +240,10 @@ const styles = StyleSheet.create({
   quantityConLeft:{
     width: '20%',
     height: '100%',
+    right: 10,
   },
   quantityConMiddle:{
-    width: '60%',
+    width: '80%',
     height: '100%',
   },
   quantityConRight:{
@@ -202,6 +262,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '80%',
     left: 5,
+    fontSize: 12,
+    fontFamily: 'Montserrat-Bold',
   },
   button:{
     width: '100%',

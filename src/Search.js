@@ -7,9 +7,9 @@ import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from
 
 const { width, height } = Dimensions.get('window');
 
-const  RenderProductsItem = ({ navigation, item, index}) => { 
+const  RenderProductsItem = ({ props, item, index}) => {
   return (      
-    <Pressable onPress={() => navigation.navigate('Product', { category: item }) }  style={styles.slideProduct} >
+    <Pressable onPress={() => props.navigation.navigate('Product', { category: item }) }  style={styles.slideProduct} >
         <Image source={{ uri:  live_url_image+item.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
         <View style={styles.slideProductCon}>
             <Text style={styles.slideProductConTitle}>{ item.name }</Text>
@@ -50,8 +50,7 @@ export default function SearchScreen({ navigation }) {
     fetch(`${live_url}category` )
       .then(response => response.json())
       .then(async(json) => { 
-        if(json['status'] == true ){  
-          // console.log(json.data);
+        if(json['status'] == true ){
           setAllCategories(json['data']); 
         } 
       })
@@ -184,7 +183,7 @@ export default function SearchScreen({ navigation }) {
         </Modal>
     </SafeAreaView>
   );
-}
+  }
 
 const styles = StyleSheet.create({
   container: {

@@ -15,7 +15,7 @@ const allowedCardAuthMethods = ['PAN_ONLY', 'CRYPTOGRAM_3DS'];
 // Set the environment before the payment request
 GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
 
-export default function makePayment({ navigation, route }){
+export default function GooglePaymentScreen({ navigation, route }){
     const [ email, setEmail ] = useState('');
     const { totalPayment, carts, fax } = route.params;
     const [ userDetails, setUserDetails ] = useState({

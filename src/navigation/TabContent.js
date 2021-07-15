@@ -14,6 +14,21 @@ import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from
 const { width, height } = Dimensions.get('window');
 
 function TabContent(props) {
+    const [ userDetails, setUserDetails ] = useState({});
+
+    useEffect(() => {
+        getUserDetails();
+    },[props.navigation]);
+
+    const getUserDetails = async () => {
+         let token = await SecureStore.getItemAsync('token');
+         if(token !== null){
+            let data = await SecureStore.getItemAsync('user_details');
+            if(data !== null){
+               setUserDetails(JSON.parse(data));
+            }
+         }
+    }
 
     const logout = async () => {
          await SecureStore.deleteItemAsync('token');
@@ -32,9 +47,9 @@ function TabContent(props) {
                 style={{ width: 30, height: 30 }}
                 borderRadius={30}
             />
-            <Text style={{ left: 10, color: '#b22234', fontSize: 10, fontFamily: 'Montserrat-Bold' }}>John Doe</Text>
+            <Text style={{ left: 10, color: '#b22234', fontSize: 10, fontFamily: 'Montserrat-Bold' }}>{ userDetails.username }</Text>
         </View> 
-        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('DashboardTabs') }>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('DashboardTabs', { screen: 'Home' }) }>
             <Text style={styles.buttonText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Saved') }>

@@ -37,6 +37,7 @@ import SendGiftScreen from '../gift/Send_gift';
 
 //Payments
 import GooglePaymentScreen from '../GooglePay';
+import makeCardPaymentScreen from '../CardPayment';
 
 export default function MyStack() {
 
@@ -63,15 +64,14 @@ export default function MyStack() {
       <Stack.Screen name="Saved" component={SavedScreen} options={{headerShown: false}} />
       <Stack.Screen name="Contact" component={ContactScreen} options={{headerShown: false}} />
 
-      
       <Stack.Screen name="Subscription" component={SubscriptionScreen} options={{headerShown: false}} />
       <Stack.Screen name="SubscriptionProducts" component={SubscriptionProductsScreen} options={{headerShown: false}} />
       <Stack.Screen name="SubscriptionCart" component={SubscriptionCartScreen} options={{headerShown: false}} />
       <Stack.Screen name="EditSubscription" component={EditSubscriptionScreen} options={{headerShown: false}} />
 
- 
       <Stack.Screen name="GooglePayment" component={GooglePaymentScreen}  />
-      
+      <Stack.Screen name="makeCardPayment" component={makeCardPaymentScreen}  options={{title: 'Card Payment'}} />
+
       <Stack.Screen name="Gift" component={GiftScreen} options={{headerShown: false}} />       
       <Stack.Screen name="SendGift" component={SendGiftScreen} options={{headerShown: false}} />
 

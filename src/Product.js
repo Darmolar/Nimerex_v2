@@ -9,9 +9,7 @@ import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from
 const { width, height } = Dimensions.get('window');
 
 export default function ProductScreen({ navigation, route }) {
-    const [ products, setProducts ] = useState(route.params.category); 
-
-    console.log(products)
+    const [ products, setProducts ] = useState(route.params.category);
 
     const  _renderItem = ({item, index}) => {
         return (
@@ -43,10 +41,10 @@ export default function ProductScreen({ navigation, route }) {
                         <Text style={styles.prodcutTitle}>{ products.name }</Text>
                     </View>
                     <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                        <Button onPress={() => addToSavedItem(item2)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton ]}>
+                        <Button onPress={() => addToSavedItem(products)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton ]}>
                             <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
                         </Button>
-                        <Button onPress={() => addToCart(item2)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                        <Button onPress={() => addToCart(products)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
                             + Cart
                         </Button>
                     </View>

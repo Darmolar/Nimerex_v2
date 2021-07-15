@@ -1,64 +1,55 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, FlatList, SafeAreaView , ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Dimensions, Image, FlatList, SafeAreaView , Pressable, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
-import { Button, TextInput } from 'react-native-paper'; 
+import { Button, TextInput } from 'react-native-paper';
+import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
 
 const { width, height } = Dimensions.get('window');
 
-const entries_carosels = [
-                            {
-                                title:"Curry, Thyme",
-                                text: "2,000",
-                                image: 'https://www.monsterinsights.com/wp-content/uploads/2019/11/breathtaking-online-shopping-statistics-you-never-knew.png'
-                            },
-                            {
-                                title:"Noddles",
-                                text: "4,500",
-                                image: 'https://www.whizsky.com/wp-content/uploads/2020/12/eCommerce-Website-Design.jpg'
-                            }, 
-                            {
-                                title:"Fish",
-                                text: "32,000",
-                                image: 'https://media.istockphoto.com/photos/online-shopping-picture-id923079848?k=6&m=923079848&s=612x612&w=0&h=VHDx1E0lmVYT-WpkLWFJhE-Rx8wDXxDUCl5XHU_KA4M='
-                            }, 
-                            {
-                                title:"Stock",
-                                text: "400,000",
-                                image: 'https://image.freepik.com/free-vector/customer-shopping-online-during-covid-19-stay-home-avoid-spreading-coronavirus_40876-1720.jpg'
-                            }, 
-                            {
-                                title:"Stock3",
-                                text: "500,000",
-                                image: 'https://image.freepik.com/free-vector/customer-shopping-online-during-covid-19-stay-home-avoid-spreading-coronavirus_40876-1720.jpg'
-                            }, 
-                            {
-                                title:"New Stock",
-                                text: "10,000",
-                                image: 'https://image.freepik.com/free-vector/customer-shopping-online-during-covid-19-stay-home-avoid-spreading-coronavirus_40876-1720.jpg'
-                            }, 
-                        ];
-   
 const  RenderProductsItem = ({item, index}) => (
-        <View style={styles.slideProduct}>
-            <Image source={{ uri: item.image }} borderRadius={5} resizeMode="cover" style={styles.slideProductImage} />
+        <Pressable onPress={() => props.navigation.navigate('Product', { category: item }) }  style={styles.slideProduct} >
+            <Image source={{ uri:  live_url_image+item.image_url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
             <View style={styles.slideProductCon}>
-                <Text style={styles.slideProductConTitle}>{ item.title }</Text>
-                <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.text }</Text>       
+                <Text style={styles.slideProductConTitle}>{ item.name }</Text>
+                <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>
                 <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
-                    <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
-                        <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
-                    </Button>
-                    <Button uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                    <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
                         + Cart
                     </Button>
                 </View>
             </View>
-        </View>
+        </Pressable>
     ); 
 
 export default function SavedScreen({ navigation }) {
- 
+  const [ carts, setCarts ] = useState([]);
+  const [ loading, setLoading ] = useState(false);
+
+  useEffect(() => {
+     getSaved();
+  },[navigation])
+
+  const getSaved = async () => {
+    setLoading(true);
+    var cart_data = await SecureStore.getItemAsync('saved_item');
+    if(cart_data !== null){
+      setCarts(JSON.parse(cart_data));
+      console.log(JSON.parse(cart_data));
+    }else{
+      setCarts([]);
+    }
+    setLoading(false);
+  }
+
+  if(loading){
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator color="#000" />
+      </View>
+    )
+  }
+
   const renderItem = ({ item }) => (
     <RenderProductsItem item={item} />
   );
@@ -75,9 +66,9 @@ export default function SavedScreen({ navigation }) {
 
             <View style={{ width: width, marginBottom: 100 }}>                
                 <FlatList
-                    data={entries_carosels} 
-                    renderItem={renderItem}
-                    keyExtractor={item => item.text} 
+                    data={carts}
+                    renderItem={RenderProductsItem}
+                    keyExtractor={item => item.id}
                     horizontal={false}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
@@ -136,31 +127,31 @@ const styles = StyleSheet.create({
   },
   slideProductImage:{
     width: '100%',
-    height: '60%',
+    height: '50%',
   },
   slideProductCon:{
     width: '100%',
-    height: "40%", 
+    height: "50%",
     alignItems: 'center',
     justifyContent: 'space-around',
   },
   slideProductConTitle:{
-    fontSize: 15,
-    fontFamily: 'Montserrat-Medium', 
+    fontSize: 12,
+    fontFamily: 'Montserrat-Regular',
     color: '#000',
+    textAlign: 'center'
   },
   slideProductConPrice:{
-    fontSize: 13,
-    fontFamily: 'Montserrat-Regular', 
+    fontSize: 12,
+    fontFamily: 'Montserrat-Light',
     color: 'blue',
   },
   slideProductConButton:{
     width: '50%',
-    height: 30,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }, 
+    height: 35,
+    color: '#fff',
+    backgroundColor: 'blue'
+  },
   slideProductConButtonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Light', 

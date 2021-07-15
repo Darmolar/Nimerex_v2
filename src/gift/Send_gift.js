@@ -4,17 +4,33 @@ import { StyleSheet, Text, View, Dimensions, Image, FlatList, TextInput as NewTe
 import { MaterialCommunityIcons, Feather, MaterialIcons, AntDesign, Ionicons } from 'react-native-vector-icons';
 import { Button, TextInput, DataTable, Modal } from 'react-native-paper'; 
 import * as Contacts from 'expo-contacts';
-
+import { live_url, SecureStore } from '../Network';
 
 const { width, height } = Dimensions.get('window'); 
 
-export default function SendGiftScreen({ navigation }) { 
-  const [visible, setVisible] = React.useState(false);
+export default function SendGiftScreen({ navigation, route }) {
+  const [ visible, setVisible] = React.useState(false);
+  const [ selectedItem, setSelectedItem ] = useState(route.params.item)
   const [ contacts, setContacts ] = React.useState([]);
   const [ fetchingContact, setFetchingContact ] = React.useState(false);
+  const [ allFetchingContact, setAllFetchingContact ] = React.useState(false);
   const [ selectedContact, setSelectedContacts ] = React.useState([]);
+  const [ userDetails, setUserDetails ] = useState({
+                                                    firstname: '',
+                                                    lastname: '',
+                                                    email: '',
+                                                    country: '',
+                                                    telephone: '',
+                                                    city: '',
+                                                    state_id: '',
+                                                    country: '',
+                                                    postal_code:'',
+                                                    address: '',
+                                                    suite_no: '' ,
+                                                });
 
   useEffect(() => {
+    getUserDetails();
     setFetchingContact(false);
     // setSelectedContacts([]);
     (async () => {
@@ -25,13 +41,24 @@ export default function SendGiftScreen({ navigation }) {
     })();
   }, []);
 
+  const getUserDetails = async () => {
+     let token = await SecureStore.getItemAsync('token');
+     if(token !== null){
+        let data = await SecureStore.getItemAsync('user_details');
+        if(data !== null){
+            var user = JSON.parse(data);
+            setUserDetails(user);
+        }
+     }
+   }
+
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
   const pickContact = async () => {
     const { status } = await Contacts.requestPermissionsAsync();
     if (status !== 'granted') {
-      alert('We require contact permission to read the files');
+      alert('We require contact permission to read your contacts');
       return false;
     } 
     setFetchingContact(true);
@@ -45,7 +72,26 @@ export default function SendGiftScreen({ navigation }) {
     }
     setFetchingContact(false);
   }
-
+  const pickAllContact = async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status !== 'granted') {
+        alert('We require contact permission to read your contacts');
+        return false;
+      }
+      setAllFetchingContact(true);
+      const { data } = await Contacts.getContactsAsync({
+        fields: [Contacts.Fields.PhoneNumbers],
+      });
+      setContacts(data);
+      var allContacts = [];
+      if (data.length > 0) {
+        data.map((item) => {
+            allContacts.push(item.phoneNumbers[0].number)
+        })
+        setSelectedContacts(allContacts);
+      }
+      setAllFetchingContact(false);
+  }
   const chooseItem = (phone, index) => {
     if(selectedContact.includes(phone)){
       var value = phone
@@ -62,7 +108,7 @@ export default function SendGiftScreen({ navigation }) {
       contacts[index].selected = true;
     }
     console.log(selectedContact);
-  } 
+  }
   const removeItem = (phone) => {
     if(selectedContact.includes(phone)){
       var value = phone 
@@ -75,6 +121,38 @@ export default function SendGiftScreen({ navigation }) {
     }
     return false;
   } 
+
+  const sendFreeGifts = async () => {
+    if(selectedContact.length == 0){
+        alert('Please select a contact');
+        return false;
+    }
+
+    var datas = {
+        sender_id: userDetails.id,
+        item_id: selectedItem.id,
+        recipients: selectedContact
+    }
+    fetch(`${live_url}gift/sendGift`,{
+             method: 'POST',
+             headers: {
+               Accept: 'application/json',
+               'Content-Type': 'application/json'
+             },
+             body: JSON.stringify(datas)
+           })
+       .then(response => response.json())
+       .then(async(json) => {
+         console.log(json);
+          if(json.status == true){
+          }else{
+//            setMessage(json.responseMessage);
+//            setVisible(true)
+          }
+       })
+       .catch(error => console.error(error))
+       .finally(res => setSubmitting(false))
+  }
 
   return (
     <View style={styles.container}>
@@ -89,19 +167,27 @@ export default function SendGiftScreen({ navigation }) {
             <View style={styles.cartCon}> 
                 <View style={{ padding: 10, width: '100%' }}>
                     <Text style={{ fontSize: 13, marginVertical: 5, fontFamily: 'Montserrat-Medium' }}>Choose Recipient(s) phone number </Text>
-                    {/* <Text style={{ fontSize: 13, marginVertical: 5, fontFamily: 'Montserrat-Medium', bottom: 5 }}>(Multiple recipient seperated by a comma allowed.) </Text> */}
-                    
-                    { 
-                      fetchingContact 
-                      ? 
-                      <ActivityIndicator color="#b22234" size="large" /> 
-                      :  
-                      <Button mode="outlined" color="#b22234" style={{ marginVertical: 20, justifyContent:'center' }}  onPress={() => pickContact() } >
-                          <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select Contact <AntDesign name="contacts" size={24} color="#b22234"/> </Text>
-                      </Button>
-                    }
-                    
- 
+                    <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        {
+                          fetchingContact
+                          ?
+                          <ActivityIndicator color="#b22234" size="large" />
+                          :
+                          <Button mode="outlined" color="#b22234" style={{ width: '45%', marginVertical: 20, justifyContent:'center' }}  onPress={() => pickContact() } >
+                              <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select <AntDesign name="contacts" size={18} color="#b22234"/> </Text>
+                          </Button>
+                        }
+                        {
+                          allFetchingContact
+                          ?
+                          <ActivityIndicator color="#b22234" size="large" />
+                          :
+                          <Button mode="outlined" color="#b22234" style={{ width: '45%', marginVertical: 20, justifyContent:'center' }}  onPress={() => pickAllContact() } >
+                              <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select All <AntDesign name="contacts" size={18} color="#b22234"/> </Text>
+                          </Button>
+                        }
+                    </View>
+
                     <ScrollView style={{ width: '100%' }}>  
                       {
                         selectedContact.length > 0 &&
@@ -117,7 +203,7 @@ export default function SendGiftScreen({ navigation }) {
             </View> 
             
             <View style={{ zIndex: -1, width: '80%', alignSelf: 'center', marginTop: 20,  }}>                  
-                <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Gift')} >
+                <Button disabled={ selectedContact.length == 0 } mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Gift')} >
                     Send Gift
                 </Button>
             </View>
