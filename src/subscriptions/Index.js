@@ -1,24 +1,106 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, FlatList, SafeAreaView , ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Dimensions, Image, FlatList, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
-import { Modal, Portal, Button, TextInput, FAB, DataTable  } from 'react-native-paper'; 
+import { Modal, Portal, Button, TextInput, FAB, DataTable  } from 'react-native-paper';
+import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from '../Network';
 
 const { width, height } = Dimensions.get('window');
- 
+
 export default function SubscriptionScreen({ navigation }) {
     const [visible, setVisible] = React.useState(false);
-  
-    const showModal = () => setVisible(true);
+    const [ loading, setLoading ] = useState(true);
+    const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+    const [ userDetails, setUserDetails ] = useState({});
+    const [ submitting, setSubmitting ] = useState(false);
+    const [ subDetails, setSubDetails ] = useState({
+                                                    name: '',
+                                                    frequency: ''
+                                                   });
+    const [ mySubs, setMySubs ] = useState([]);
+    const [ selected, setSelected ] = useState({});
+
+    useEffect(() => {
+      getUserDetails();
+      const unsubscribe = navigation.addListener('focus', () => {
+          getUserDetails();
+      });
+      return unsubscribe;
+    },[navigation]);
+
+    const showModal = (item) => { setSelected(item); setVisible(true)};
     const hideModal = () => setVisible(false);
 
+    const getUserDetails = async () => {
+       let token = await SecureStore.getItemAsync('token');
+       if(token !== null){
+          setIsLoggedIn(true);
+          let data = await SecureStore.getItemAsync('user_details');
+          if(data !== null){
+             setUserDetails(JSON.parse(data));
+             setLoading(false);
+             getMySubs(JSON.parse(data).id);
+          }
+       }else{
+          setIsLoggedIn(false);
+          navigation.navigate('Login')
+       }
+     }
 
+    const getMySubs = async (user_id) => {
+        setLoading(true);
+        fetch(`${live_url}subscription/user/${user_id}` )
+          .then(response => response.json())
+          .then(async(json) =>{
+                if(json['status'] == true && json.data.length > 0 ){
+                  setMySubs(json.data);
+                }else{
+                  setMySubs([])
+                }
+          })
+          .catch(error => console.error(error))
+          .finally(res => setLoading(false))
+      }
+
+    const deleteSubs = async (item) => {
+      setLoading(true);
+      var new_payment_data = new FormData;
+      new_payment_data.append('user_id', userDetails.id);
+      new_payment_data.append('id', item.id);
+        fetch(`${live_url}subscription/create`,{
+         method: 'POST',
+         headers: {
+           Accept: 'application/delete',
+           'Content-Type': 'multipart/form-data'
+         },
+         body: new_payment_data
+        })
+          .then(response => response.json())
+          .then((json) => {
+            if(json.status == true){
+                alert(json.message);
+            }else{
+                alert(json.message);
+                return false;
+            }
+          })
+          .catch(error => console.error(error))
+          .finally(res => setLoading(false));
+    }
+
+    if(loading){
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#000" />
+        </View>
+      )
+    }
   return (
     <SafeAreaView  style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
           <MaterialCommunityIcons name="menu" size={24} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
-          <Text style={styles.headerText}>SubScription</Text> 
+          <Text style={styles.headerText}>Subscription</Text>
           <MaterialCommunityIcons name="plus" size={24} color="#b22234" size={26} />
         </View>
         <View style={styles.body}> 
@@ -27,48 +109,43 @@ export default function SubscriptionScreen({ navigation }) {
                     <DataTable.Header>
                         <DataTable.Title>Name</DataTable.Title>
                         <DataTable.Title >Frequency</DataTable.Title>
-                        <DataTable.Title >Total</DataTable.Title>
-                        <DataTable.Title numeric >Discount</DataTable.Title>
-                        {/* <DataTable.Title numeric >Discount Used</DataTable.Title> */}
-                        {/* <DataTable.Title >Last Processed</DataTable.Title>  */}
+                        <DataTable.Title numeric>Total</DataTable.Title>
                         <DataTable.Title numeric>Action</DataTable.Title>
                     </DataTable.Header>
-
-                    <DataTable.Row>
-                        <DataTable.Cell>
-                            <Text style={styles.itemTitle}>Frozen</Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell >
-                            <Text style={styles.itemTitle}>BI-WEEKLY</Text>
-                        </DataTable.Cell>
-                        <DataTable.Cell numeric>
-                            <Text style={styles.itemTitle}>{51.89}</Text>
-                        </DataTable.Cell>
-                        {/* <DataTable.Cell numeric>
-                            <Text style={styles.itemTitle}>{0.00}</Text>
-                        </DataTable.Cell> */}
-                        {/* <DataTable.Cell>
-                            <Text style={styles.itemTitle}>No</Text>
-                        </DataTable.Cell> */}
-                        <DataTable.Cell numeric> 
-                            <MaterialCommunityIcons name="menu" size={18} color="red" onPress={() => showModal() } style={styles.closeButton} /> 
-                        </DataTable.Cell>
-                    </DataTable.Row>         
+                    {
+                        mySubs.length > 0 &&
+                        mySubs.map((item, index) => (
+                            <DataTable.Row key={index}>
+                                <DataTable.Cell>
+                                    <Text style={styles.itemTitle}>{ item.name }</Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell >
+                                    <Text style={styles.itemTitle}>{ item.frequency }</Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell numeric>
+                                    <Text style={styles.itemTitle}>{ item.total_cost }</Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell numeric>
+                                    <MaterialCommunityIcons name="menu" size={18} color="red" onPress={() => showModal(item) } style={styles.closeButton} />
+                                </DataTable.Cell>
+                            </DataTable.Row>
+                        ))
+                    }
                 </DataTable>
             </View>
         </View>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
           <View style={styles.listCon}>
-             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('EditSubscription')} >
+             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('EditNewSubscription', { item: selected })} >
                  <Text style={styles.actionButtonText}>Edit</Text>
              </TouchableOpacity>
-             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('SubscriptionProducts')} >
+             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('SubscriptionProducts', { item: selected })} >
                  <Text style={styles.actionButtonText}>Add Product(s)</Text>
              </TouchableOpacity>
-             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('SubscriptionCart')}>
+             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('SubscriptionCart', { item: selected })}>
                  <Text style={styles.actionButtonText}>View Product(s)</Text>
              </TouchableOpacity>
-             <TouchableOpacity style={styles.actionButton}>
+             <TouchableOpacity style={styles.actionButton} onPress={() => deleteSubs(selected) } >
                  <Text style={styles.actionButtonText}>Remove</Text>
              </TouchableOpacity>
           </View>

@@ -47,7 +47,7 @@ export default function LoginScreen({ navigation }) {
             await SecureStore.setItemAsync('token', json.data.token);
             navigation.navigate('DashboardTabs', { screen: 'Home' })
           }else{
-            setMessage(json.responseMessage);
+            setMessage(json.message);
             setVisible(true)
           }
        })

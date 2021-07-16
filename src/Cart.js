@@ -10,16 +10,17 @@ const { width, height } = Dimensions.get('window');
 
 export default function CartScreen({ navigation }) { 
   const [ carts, setCarts ] = useState([]);
-  const [ loading, setLoading ] = useState(false);
+  const [ loading, setLoading ] = useState(true);
   const [ cartTotal, setCartTotal ] = useState(0);
   const [ fax, setFax ] = useState(0);
 
   useEffect(() => {
+      setCartTotal(0);
+      setFax(0);
       const unsubscribe = navigation.addListener('focus', () => {
-            getCarts();
-            getFaxs();
+        getCarts();
+        getFaxs();
       });
-
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
   },[navigation])
@@ -32,6 +33,7 @@ export default function CartScreen({ navigation }) {
       getTotalInfo(JSON.parse(cart_data));
     }else{
       setCarts([]);
+      setCartTotal(0);
     }
     setLoading(false);
   }
@@ -84,11 +86,11 @@ export default function CartScreen({ navigation }) {
   }
 
   const getTotalInfo = (item) => {
-      var total = 0;
-        item.map((item, index) => {
-          total += item.price * item.qty
-        })
-        setCartTotal(total);
+    var total = 0;
+    item.map((item, index) => {
+      total += item.price * item.qty
+    })
+    setCartTotal(total);
   }
 
   if(loading){
@@ -190,7 +192,7 @@ export default function CartScreen({ navigation }) {
           </View>
           
             <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Payment', { carts })} >
+                <Button disabled={ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))) < 1 } mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Payment', { carts })} >
                     Proceed to payment
                 </Button>
             </View>

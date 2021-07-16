@@ -11,7 +11,6 @@ const { width, height } = Dimensions.get('window');
 
 export default function ResponseScreen({ navigation, route }){
     const { response } = route.params;
-
     useEffect(() => {
         emptyCart()
     },[])

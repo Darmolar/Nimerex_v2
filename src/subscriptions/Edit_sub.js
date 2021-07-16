@@ -6,17 +6,14 @@ import { Button, TextInput, DataTable, Snackbar  } from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
 import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from '../Network';
 
-const { width, height } = Dimensions.get('window'); 
+const { width, height } = Dimensions.get('window');
 
-export default function EditSubscriptionScreen({ navigation }) {
+export default function EditNewSubscriptionScreen({ navigation, route }) {
     const [ loading, setLoading ] = useState(true);
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
     const [ userDetails, setUserDetails ] = useState({});
     const [ submitting, setSubmitting ] = useState(false);
-    const [ subDetails, setSubDetails ] = useState({
-                                                    name: '',
-                                                    frequency: ''
-                                                   });
+    const [ subDetails, setSubDetails ] = useState(route.params.item);
     const [ visible, setVisible ] = React.useState(false);
     const [ message, setMessage ] = useState('');
     const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
@@ -50,7 +47,8 @@ export default function EditSubscriptionScreen({ navigation }) {
           new_payment_data.append('user_id', userDetails.id);
           new_payment_data.append('frequency', subDetails.frequency);
           new_payment_data.append('name', subDetails.name);
-            fetch(`${live_url}subscription/create`,{
+          new_payment_data.append('id', subDetails.id);
+            fetch(`${live_url}subscription/update`,{
              method: 'POST',
              headers: {
                Accept: 'application/json',
@@ -81,13 +79,13 @@ export default function EditSubscriptionScreen({ navigation }) {
         </View>
       )
     }
- 
+
   return (
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
           <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
-          <Text style={styles.headerText}>Create SubScription </Text>
+          <Text style={styles.headerText}>Edit SubScription </Text>
           {/* <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} /> */}
           <View></View>
         </View>
@@ -150,8 +148,8 @@ export default function EditSubscriptionScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,  
-  }, 
+    flex: 1,
+  },
   header:{
     marginTop: 40,
     height: 50,
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
   },
   headerText:{
     fontSize: 20,
-    fontFamily: 'Montserrat-Bold', 
+    fontFamily: 'Montserrat-Bold',
     color: '#000',
   },
   body:{
@@ -170,7 +168,7 @@ const styles = StyleSheet.create({
   },
   cartCon:{
     padding: 10
-  },  
+  },
   formGroup:{
     width: '100%',
     height: 50,

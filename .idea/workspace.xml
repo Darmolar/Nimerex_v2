@@ -23,16 +23,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5458fa27-7529-4ac3-a7e6-5a4956922ef4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/success.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/subscriptions/Edit_sub.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CardPayment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/CardPayment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Category.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Category.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GooglePay.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/GooglePay.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Payment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Response.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Response.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Search.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Search.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auth/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gift/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gift/Index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gift/Send_gift.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gift/Send_gift.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/navigation/Stack.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/Stack.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/profile/billing_info.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/profile/billing_info.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/subscriptions/Enter_sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/Enter_sub.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/subscriptions/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/Index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/subscriptions/Sub_cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/Sub_cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/subscriptions/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/products.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,10 +110,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1626088161040" />
-    <state x="-7" y="27" width="1038" height="492" key="AVDManager" timestamp="1626392003979">
+    <state x="-7" y="27" width="1038" height="492" key="AVDManager" timestamp="1626467022692">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="-7" y="27" width="1038" height="492" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1626392003979" />
+    <state x="-7" y="27" width="1038" height="492" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1626467022692" />
     <state x="-7" y="29" width="1038" height="584" key="AVDManager/0.0.1366.768@0.0.1366.768" timestamp="1626040351803" />
     <state x="489" y="132" key="AndroidProcessChooserDialog" timestamp="1625843388332">
       <screen x="0" y="0" width="1366" height="768" />

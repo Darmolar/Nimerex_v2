@@ -59,6 +59,7 @@ export default function makeCardPaymentScreen({ navigation, route }){
         }
     }
     const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+
     const getUserDetails = async () => {
          let token = await SecureStore.getItemAsync('token');
          if(token !== null){
@@ -158,14 +159,6 @@ export default function makeCardPaymentScreen({ navigation, route }){
     return (
         <View style={styles.container}>
           <View style={styles.body}>
-            <View style={styles.formGroup}>
-             <TextInput
-               label="Email"
-               style={{ height: 50, fontSize: 12 }}
-               value={userDetails.email}
-               editable={false}
-             />
-           </View>
            <View style={styles.formGroup}>
               <TextInput
                 label="Card Number"
@@ -257,7 +250,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: '#fff',
     marginVertical: 20
   },
   input:{

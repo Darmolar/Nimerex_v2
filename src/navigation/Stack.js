@@ -30,6 +30,7 @@ import SubscriptionScreen from '../subscriptions/Index';
 import SubscriptionProductsScreen from '../subscriptions/products';
 import SubscriptionCartScreen from '../subscriptions/Sub_cart';
 import EditSubscriptionScreen from '../subscriptions/Enter_sub';
+import EditNewSubscriptionScreen from '../subscriptions/Edit_sub';
 
 //Gift Screen
 import GiftScreen from '../gift/Index';
@@ -71,6 +72,7 @@ export default function MyStack() {
       <Stack.Screen name="SubscriptionProducts" component={SubscriptionProductsScreen} options={{headerShown: false}} />
       <Stack.Screen name="SubscriptionCart" component={SubscriptionCartScreen} options={{headerShown: false}} />
       <Stack.Screen name="EditSubscription" component={EditSubscriptionScreen} options={{headerShown: false}} />
+      <Stack.Screen name="EditNewSubscription" component={EditNewSubscriptionScreen} options={{headerShown: false}} />
 
       <Stack.Screen name="GooglePayment" component={GooglePaymentScreen}  />
       <Stack.Screen name="makeCardPayment" component={makeCardPaymentScreen}  options={{title: 'Card Payment'}} />

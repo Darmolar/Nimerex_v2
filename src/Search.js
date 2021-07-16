@@ -7,26 +7,6 @@ import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from
 
 const { width, height } = Dimensions.get('window');
 
-const  RenderProductsItem = ({ props, item, index}) => {
-  return (      
-    <Pressable onPress={() => props.navigation.navigate('Product', { category: item }) }  style={styles.slideProduct} >
-        <Image source={{ uri:  live_url_image+item.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
-        <View style={styles.slideProductCon}>
-            <Text style={styles.slideProductConTitle}>{ item.name }</Text>
-            <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>       
-            <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
-                <Button onPress={() => addToSavedItem(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
-                    <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
-                </Button>
-                <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
-                    + Cart
-                </Button>
-            </View>
-        </View>
-    </Pressable>
-  )
-}
-
 export default function SearchScreen({ navigation }) {
   const [ loading, setLoading ] = useState(true);
   const [ userDetails, setUserDetails ] = useState({});
@@ -121,9 +101,6 @@ export default function SearchScreen({ navigation }) {
       </View>
     )
   }
-  const renderItem = ({ item }) => (
-    <RenderProductsItem item={item} />
-  );
 
   return (
     <SafeAreaView  style={styles.container}>
@@ -153,7 +130,23 @@ export default function SearchScreen({ navigation }) {
             <View style={{ width: width, marginBottom: 220 }}>         
                 <FlatList
                     data={allProducts} 
-                    renderItem={renderItem}
+                    renderItem={(product, index) => {
+                        var item = product.item;
+                        return(
+                            <Pressable onPress={() => navigation.navigate('Product', { category: item }) }  style={styles.slideProduct} >
+                                <Image source={{ uri:  live_url_image+item.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
+                                <View style={styles.slideProductCon}>
+                                    <Text style={styles.slideProductConTitle}>{ item.name }</Text>
+                                    <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>
+                                    <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
+                                        <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                                            + Subscription
+                                        </Button>
+                                    </View>
+                                </View>
+                            </Pressable>
+                          )
+                    }}
                     keyExtractor={item => item.id} 
                     horizontal={false}
                     numColumns={2}

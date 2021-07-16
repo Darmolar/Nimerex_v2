@@ -94,7 +94,7 @@ export default function GiftScreen({ navigation }) {
                                     <Text style={styles.itemTitle}>{ item.shop_name }</Text>
                                 </DataTable.Cell>
                                 <DataTable.Cell numeric>
-                                    <MaterialCommunityIcons name="menu" size={18} color="red" onPress={() => showModal(item) } style={styles.closeButton} />
+                                    <MaterialCommunityIcons name="menu" size={20} color="red" onPress={() => navigation.navigate('SendGift', { item: selected }) } style={styles.closeButton} />
                                 </DataTable.Cell>
                             </DataTable.Row>
                         ))

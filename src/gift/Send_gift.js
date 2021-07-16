@@ -64,6 +64,7 @@ export default function SendGiftScreen({ navigation, route }) {
     setFetchingContact(true);
     const { data } = await Contacts.getContactsAsync({
       fields: [Contacts.Fields.PhoneNumbers],
+      pageSize: 100
     });
     setContacts(data);
     if (data.length > 0) { 
@@ -81,13 +82,15 @@ export default function SendGiftScreen({ navigation, route }) {
       setAllFetchingContact(true);
       const { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
+        pageSize: 100
       });
       setContacts(data);
       var allContacts = [];
+      console.log(data);
       if (data.length > 0) {
         data.map((item) => {
             allContacts.push(item.phoneNumbers[0].number)
-        })
+        });
         setSelectedContacts(allContacts);
       }
       setAllFetchingContact(false);
@@ -109,6 +112,7 @@ export default function SendGiftScreen({ navigation, route }) {
     }
     console.log(selectedContact);
   }
+
   const removeItem = (phone) => {
     if(selectedContact.includes(phone)){
       var value = phone 
