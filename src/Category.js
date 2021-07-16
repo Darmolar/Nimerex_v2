@@ -44,7 +44,7 @@ export default function CategoryScreen({ navigation, route }) {
 
             <View style={{ width: width, marginBottom: 100 }}>                
                 <FlatList
-                    data={products} 
+                    data={products.data}
                     renderItem={renderItem}
                     keyExtractor={item => item.id} 
                     horizontal={false}

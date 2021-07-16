@@ -11,9 +11,22 @@ const { width, height } = Dimensions.get('window');
 
 export default function ResponseScreen({ navigation, route }){
     const { response } = route.params;
+
+    useEffect(() => {
+        emptyCart()
+    },[])
+
+    const emptyCart = async () => {
+        await SecureStore.deleteItemAsync('cart_item_item');
+    }
+
     return (
         <View style={styles.container}>
-
+            <Image source={require('../assets/success.jpg')} style={{ width: 300, height: 300, }} />
+            <Text style={{ marginTop: 20, fontSize: 20, fontFamily: 'Montserrat-Light', color: '#000' }} >{ response.message }</Text>
+            <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('DashboardTabs', { screen: 'Home' }) } >
+                Proceed
+            </Button>
         </View>
       );
 }
@@ -21,5 +34,19 @@ export default function ResponseScreen({ navigation, route }){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
+  button:{
+    width: '80%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  buttonText:{
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    color: '#fff'
+  }
 });

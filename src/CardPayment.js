@@ -10,7 +10,7 @@ import { live_url, payment_url, live_url_image, SecureStore, addToCart, addToSav
 const { width, height } = Dimensions.get('window');
 
 export default function makeCardPaymentScreen({ navigation, route }){
-    const { totalPayment, carts, fax } = route.params;
+    const { totalPayment, carts, fax, shipping_fee, sub_total, orders, billingInfo } = route.params;
     const [ userDetails, setUserDetails ] = useState({
                                                     firstname: '',
                                                     lastname: '',
@@ -30,13 +30,34 @@ export default function makeCardPaymentScreen({ navigation, route }){
                                                         month: '',
                                                         cvv: '',
                                                     });
+    const [ cartItem, setItem ] = useState(orders);
+    const [ order_items, setOrder_items ] = useState({});
 
     const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
 
     useEffect(()=>{
+       setOrder_items({})
        getUserDetails();
+       formatCartItem();
     },[])
 
+    const formatCartItem = async () => {
+        var new_item = new Object;
+        for (const [key, value] of Object.entries(cartItem)) {
+          var id = Math.random().toString(36).substring(1, 20);
+          var data = {
+                    "product_id": value.id,
+                    "product_attribute_key": null,
+                    "product_attribute": null,
+                    "quantity": value.qty,
+                    "cost": value.price,
+                    "total": value.qty * value.price,
+                    "weight": value.options.weight,
+                  }
+          order_items[key] = data;
+          await setOrder_items(order_items)
+        }
+    }
     const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
     const getUserDetails = async () => {
          let token = await SecureStore.getItemAsync('token');
@@ -83,10 +104,48 @@ export default function makeCardPaymentScreen({ navigation, route }){
            })
        .then(response => response.json())
        .then(async(json) => {
-         console.log(json);
           if(json.success == true){
             setMessage(json.result.description);
-            setVisible(true)
+            setVisible(true);
+             var data = {
+                          "user_id": userDetails.id,
+                          "order_items":  order_items,
+                          "total": totalPayment,
+                          "discount": "0",
+                          "coupon_amount": "0",
+                          "coupon_code": null,
+                          "handling_fee": "0",
+                          "shippingcost": [
+                            {
+                              "foreign": shipping_fee
+                            }
+                          ],
+                          "payment_option": "Card",
+                          "billing_address_id": billingInfo,
+                          "sub_total": sub_total,
+                          "tax": fax,
+                          "transaction_id": json.result.transaction_id,
+                          "transaction_reference": json.result.transaction_id,
+                    }
+             setSubmitting(true)
+             console.log(data)
+             fetch(`${live_url}checkout/order/create`,{
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then((json) => {
+                   console.log(json)
+                   if(json.status == true){
+                        navigation.navigate('Response', { response: json })
+                   }
+                })
+               .catch(error => console.error(error))
+               .finally(res => setSubmitting(false))
           }else{
             setMessage(json.errors.error_message);
             setVisible(true)

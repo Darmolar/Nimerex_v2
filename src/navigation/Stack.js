@@ -35,6 +35,9 @@ import EditSubscriptionScreen from '../subscriptions/Enter_sub';
 import GiftScreen from '../gift/Index';
 import SendGiftScreen from '../gift/Send_gift';
 
+//Response Screen
+import ResponseScreen from '../Response';
+
 //Payments
 import GooglePaymentScreen from '../GooglePay';
 import makeCardPaymentScreen from '../CardPayment';
@@ -74,6 +77,9 @@ export default function MyStack() {
 
       <Stack.Screen name="Gift" component={GiftScreen} options={{headerShown: false}} />       
       <Stack.Screen name="SendGift" component={SendGiftScreen} options={{headerShown: false}} />
+
+
+      <Stack.Screen name="Response" component={ResponseScreen} options={{headerShown: false}} />
 
     </Stack.Navigator>
   );

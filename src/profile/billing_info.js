@@ -121,7 +121,7 @@ export default function BillingInfoScreen({ navigation }) {
               new_payment_data.append('phone', billingInfo.phone);
               new_payment_data.append('email', billingInfo.email);
               new_payment_data.append('suburb_or_town', billingInfo.suburb_or_town);
-              new_payment_data.append('state_or_territory', parseInt(billingInfo.state_or_territory));
+              new_payment_data.append('state_or_territory', billingInfo.state_or_territory);
               new_payment_data.append('country', billingInfo.country);
               new_payment_data.append('post_code', billingInfo.post_code);
               new_payment_data.append('full_address', billingInfo.full_address);
@@ -157,7 +157,7 @@ export default function BillingInfoScreen({ navigation }) {
               new_payment_data.append('phone', billingInfo.phone);
               new_payment_data.append('email', billingInfo.email);
               new_payment_data.append('suburb_or_town', billingInfo.suburb_or_town);
-              new_payment_data.append('state_or_territory', parseInt(billingInfo.state_or_territory));
+              new_payment_data.append('state_or_territory', billingInfo.state_or_territory);
               new_payment_data.append('country', billingInfo.country);
               new_payment_data.append('post_code', billingInfo.post_code);
               new_payment_data.append('full_address', billingInfo.full_address);
@@ -258,7 +258,7 @@ export default function BillingInfoScreen({ navigation }) {
                   >
                   {
                     state.map((item, index) => (
-                        <Picker.Item key={index} label={item.name} value={item.id} />
+                        <Picker.Item key={index} label={item.name} value={item.name} />
                     ))
                   }
                 </Picker>

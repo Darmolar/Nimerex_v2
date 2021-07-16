@@ -36,7 +36,6 @@ export default function HomeScreen({ navigation }) {
   const [ userDetails, setUserDetails ] = useState({});
   const [ allProducts, setAllProducts ] = useState([]);
 
-
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
 
@@ -72,13 +71,8 @@ export default function HomeScreen({ navigation }) {
     fetch(`${live_url}product` )
       .then(response => response.json())
       .then(async(json) => {
-        console.log(json["category"]);
-        if(json['status'] == true ){  
-          // console.log(json.data);
+        if(json['status'] == true ){
           setAllProducts(json.data); 
-        }else{
-          // setMessage(json.responseMessage); 
-          // setVisible(true)
         }
       })
       .catch(error => console.error(error))
@@ -124,7 +118,7 @@ export default function HomeScreen({ navigation }) {
               allProducts["category"] &&
               Object.keys(allProducts["category"]).map((item, index) => {
                 // console.log(allProducts["category"][item])
-                if(allProducts["category"][item].length < 1){
+                if(allProducts["category"][item].data.length < 1){
                   return null;
                 }
                 return(
@@ -138,8 +132,8 @@ export default function HomeScreen({ navigation }) {
                       </View>
                       <ScrollView style={styles.productListConSlides} horizontal showsHorizontalScrollIndicator={false} >
                         {
-                          
-                          allProducts["category"][item].map((item2, index2) => {
+
+                          allProducts["category"][item].data.map((item2, index2) => {
                             if(index2 > 4){
                               return null;
                             }
@@ -148,7 +142,7 @@ export default function HomeScreen({ navigation }) {
                                     <Image source={{ uri:  live_url_image+item2.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
                                     <View style={styles.slideProductCon}>
                                       <Text style={styles.slideProductConTitle}>{ item2.name }</Text>
-                                      <Text style={styles.slideProductConPrice}>{'\u0024'}{ item2.price }</Text> 
+                                      <Text style={styles.slideProductConPrice}>{'\u0024'}{ item2.price }</Text>
                                       <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
                                           <Button onPress={() => addToSavedItem(item2)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
                                               <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
@@ -161,11 +155,11 @@ export default function HomeScreen({ navigation }) {
                                 </Pressable>
                               )
                           })
-                        } 
+                        }
                       </ScrollView>
                     </View>
                     {
-                      index % 2 === 0 &&                        
+                      index % 2 === 0 &&
                          <View style={styles.addCon}>
                            <Text style={styles.addConText}>ADs Section</Text>
                          </View>

@@ -31,7 +31,6 @@ export default function PaymentScreen({ navigation, route }) {
   const [ shippingInfo, setShippingInfo ] = useState(0);
 
   useEffect(() => {
-    getShippingOptions();
     getFaxs();
     getUserDetails();
     (()=>{
@@ -51,6 +50,7 @@ export default function PaymentScreen({ navigation, route }) {
         if(data !== null){
            setUserDetails(JSON.parse(data));
            getBillingInfo(JSON.parse(data).id)
+           getShippingOptions(JSON.parse(data).id);
         }
      }else{
         setIsLoggedIn(false)
@@ -70,10 +70,10 @@ export default function PaymentScreen({ navigation, route }) {
       .finally(res => console.log() )
   }
 
-  const getShippingOptions = async () => {
+  const getShippingOptions = async (user_id) => {
       var item_data = new Object();
       const promises = carts.map(async (item, index) => {
-                            var id = Math.random().toString(36).substring(1, 20);
+                           var id = Math.random().toString(36).substring(1, 20);
                            await fetch(`${live_url}product/find/${item.id}` )
                              .then(response => response.json())
                              .then(async(json) => {
@@ -102,7 +102,7 @@ export default function PaymentScreen({ navigation, route }) {
       if(is_done_data){
           setOrder(item_data);
           var shipping_data = {
-            'user_id': userDetails.id,
+            'user_id': user_id,
             'items': item_data,
           }
           setLoading(true);
@@ -116,24 +116,24 @@ export default function PaymentScreen({ navigation, route }) {
           })
            .then(response => response.json())
            .then(json => {
-             setLoading(true);
              if(json.status == true ){
                 setShippingInfo(json.data.foreign_shipping.cost);
-                console.log(json.data.foreign_shipping.cost)
+//                console.log(json.data.foreign_shipping.cost)
+                setLoading(false)
              }
            })
            .catch(error => console.error(error))
-           .finally(() => setLoading(false));
+           .finally(() => console.log());
       }
   }
 
   const getBillingInfo = async (user_id) => {
-    setLoading(true);
     fetch(`${live_url}address/find/${user_id}` )
       .then(response => response.json())
       .then(async(json) => {
         if(json.status == true ){
             setBillingInfo({
+                           id: json.data.id,
                            phone: json.data.phone,
                            email: json.data.email,
                            suburb_or_town: json.data.suburb_or_town,
@@ -313,7 +313,11 @@ export default function PaymentScreen({ navigation, route }) {
                                           onPress={() => navigation.navigate('makeCardPayment', {
                                                                               totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
                                                                               carts: carts,
-                                                                              fax:fax
+                                                                              fax:fax,
+                                                                              orders: orders,
+                                                                              sub_total: cartTotal,
+                                                                              shipping_fee: shippingInfo,
+                                                                              billingInfo: billingInfo.id
                                                                             })
                                                                           } >
                                     Confirm payment
@@ -332,7 +336,11 @@ export default function PaymentScreen({ navigation, route }) {
                                           onPress={() => navigation.navigate('GooglePayment', {
                                                                               totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
                                                                               carts: carts,
-                                                                              fax:fax
+                                                                              fax:fax,
+                                                                              orders: orders,
+                                                                              sub_total: cartTotal,
+                                                                              shipping_fee: shippingInfo,
+                                                                              billingInfo: billingInfo.id
                                                                             })
                                                                           } >
                                     Confirm payment

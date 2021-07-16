@@ -17,7 +17,7 @@ GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
 
 export default function GooglePaymentScreen({ navigation, route }){
     const [ email, setEmail ] = useState('');
-    const { totalPayment, carts, fax } = route.params;
+    const { totalPayment, carts, fax, shipping_fee, sub_total, orders, billingInfo } = route.params;
     const [ userDetails, setUserDetails ] = useState({
                                                     firstname: '',
                                                     lastname: '',
@@ -31,12 +31,34 @@ export default function GooglePaymentScreen({ navigation, route }){
     const [ message, setMessage ] = useState('');
     const [ submitting, setSubmitting ] = useState(false);
     const [ canUse, setCanUse ] = useState(false);
+    const [ cartItem, setItem ] = useState(orders);
+    const [ order_items, setOrder_items ] = useState({});
+
     const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
 
     useEffect(()=>{
        setSubmitting(true);
        getUserDetails();
+       formatCartItem()
     },[])
+
+    const formatCartItem = async () => {
+        var new_item = new Object;
+        for (const [key, value] of Object.entries(cartItem)) {
+          var id = Math.random().toString(36).substring(1, 20);
+          var data = {
+                    "product_id": value.id,
+                    "product_attribute_key": null,
+                    "product_attribute": null,
+                    "quantity": value.qty,
+                    "cost": value.price,
+                    "total": value.qty * value.price,
+                    "weight": value.options.weight,
+                  }
+          order_items[key] = data;
+          await setOrder_items(order_items)
+        }
+    }
 
     const getUserDetails = async () => {
      let token = await SecureStore.getItemAsync('token');
@@ -57,7 +79,7 @@ export default function GooglePaymentScreen({ navigation, route }){
         tokenizationSpecification: {
           type: 'PAYMENT_GATEWAY',
           gateway: 'authorizenet',
-          gatewayMerchantId: '743444',
+          gatewayMerchantId: '743446',
         },
         allowedCardNetworks,
         allowedCardAuthMethods,
@@ -103,8 +125,46 @@ export default function GooglePaymentScreen({ navigation, route }){
                       .then((json) => {
                         console.log(json);
                         if(json.success == true ){
-                          // console.log(json.data);
-                          setAllProducts(json.data);
+                            var id = '1234567899876';
+                            var data = {
+                                  "user_id": user_id,
+                                  "order_items":  order_items,
+                                  "total": totalPayment,
+                                  "discount": "0",
+                                  "coupon_amount": "0",
+                                  "coupon_code": null,
+                                  "handling_fee": "0",
+                                  "shippingcost": [
+                                    {
+                                      "foreign": shipping_fee
+                                    }
+                                  ],
+                                  "payment_option": "Card",
+                                  "billing_address_id": billingInfo,
+                                  "sub_total": sub_total,
+                                  "tax": fax,
+                                  "transaction_id": json.result.transaction_id,
+                                  "transaction_reference": json.result.transaction_id,
+                               }
+                             setSubmitting(true)
+                             console.log(data)
+                             fetch(`${live_url}checkout/order/create`,{
+                                  method: 'POST',
+                                  headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json'
+                                  },
+                                  body: JSON.stringify(data)
+                                })
+                                .then(response => response.json())
+                                .then((json) => {
+                                   console.log(json)
+                                   if(json.status == true){
+                                        navigation.navigate('Response', { response: json })
+                                   }
+                                })
+                               .catch(error => console.error(error))
+                               .finally(res => setSubmitting(false))
                         }else{
                            setMessage(json.errors.error_message);
                            setVisible(true);
@@ -124,13 +184,19 @@ export default function GooglePaymentScreen({ navigation, route }){
 
     return (
         <View style={styles.container}>
-            {
-                 submitting == true
-                ?
-                <ActivityIndicator color="#000" size="small" />
-                :
-                <Text>Cannot use google pay </Text>
-            }
+
+            <Snackbar
+              visible={visible}
+              onDismiss={onDismissSnackBar}
+              action={{
+                label: 'Close',
+                onPress: () => {
+                  setMessage('');
+                  setVisible(false);
+                },
+              }}>
+              { message }
+            </Snackbar>
         </View>
       );
 }
