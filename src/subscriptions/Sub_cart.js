@@ -299,12 +299,16 @@ export default function SubscriptionCartScreen({ navigation, route }) {
                             </View>
                         </View>
                     </View>
-
-
                     <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                        <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => usePaymentMode == 'card' ? payWithSavedCard()  :  payWithNewCard()  } >
-                            Authorize
-                        </Button>
+                         <TouchableOpacity style={styles.button}  onPress={() => usePaymentMode == 'card' ? payWithSavedCard()  :  payWithNewCard()  } >
+                               {
+                                     submitting == true
+                                    ?
+                                        <ActivityIndicator color="#fff" />
+                                    :
+                                        <Text style={styles.buttonText}>Authorize</Text>
+                               }
+                         </TouchableOpacity>
                     </View>
                 </ScrollView>
                 <Snackbar
@@ -391,10 +395,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
   },
   formGroup:{

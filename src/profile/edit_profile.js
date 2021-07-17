@@ -271,9 +271,15 @@ export default function EditProfileScreen({ navigation }) {
                      />
                 </View>
                 <View style={{ width: '100%' }}>
-                    <Button loading={submitting} compact={true}  mode="contained" color="#b22234" style={styles.button}  onPress={() =>  updateProfileInfo()} >
-                        Update
-                    </Button>
+                   <TouchableOpacity style={[styles.button]}  onPress={() => updateProfileInfo() } >
+                        {
+                                 submitting == true
+                            ?
+                                <ActivityIndicator color="#fff" />
+                            :
+                                <Text style={styles.buttonText}>Update</Text>
+                       }
+                   </TouchableOpacity>
                 </View>
                 <Snackbar
                   visible={visible}
@@ -346,10 +352,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
-  } 
+  },
 });

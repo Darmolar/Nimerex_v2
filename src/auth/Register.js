@@ -154,10 +154,16 @@ export default function RegisterScreen({ navigation }) {
             <View style={{ width: '100%' }}>  
               <Pressable onPress={() => navigation.navigate('Login')} >
                 <Text style={{  fontSize: 12, textAlign: 'center', marginBottom: 20, fontFamily: 'Montserrat-Regular',  }}>Already have an account? <Text style={{ fontFamily: 'Montserrat-Bold', color: '#b22234'  }}>Login</Text></Text>
-              </Pressable>   
-              <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => register() } >
-                 REGISTER  
-              </Button>
+              </Pressable>
+              <TouchableOpacity style={styles.button}  onPress={() => register()} >
+                {
+                     submitting == true
+                    ?
+                        <ActivityIndicator color="#fff" />
+                    :
+                        <Text style={styles.buttonText}>Register</Text>
+                }
+              </TouchableOpacity>
             </View>  
           </ScrollView>
           <Snackbar
@@ -225,11 +231,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
+    borderRadius: 10,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
   }
 });

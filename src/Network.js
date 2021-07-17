@@ -43,13 +43,8 @@ const addToCart = async (datas) => {
     }  
 }
 
-const addToSavedItem = async (datas) => { 
-    var item  = {
-        id: datas.id,
-        name: datas.name,
-        price: datas.price,
-        image_url: datas.images[0].url,
-    }
+const addToSavedItem = async (datas) => {
+    var item  = datas;
     var cart_item = await SecureStore.getItemAsync('saved_item');
     if(cart_item !== null){
         var cart = JSON.parse(cart_item); 

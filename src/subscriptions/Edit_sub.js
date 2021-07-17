@@ -117,16 +117,28 @@ export default function EditNewSubscriptionScreen({ navigation, route }) {
                         </View>
                     </View>
                     <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                        <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => createSub() } >
-                            Submit
-                        </Button>
+                        <TouchableOpacity style={styles.button}  onPress={() => createSub()} >
+                           {
+                                 submitting == true
+                                ?
+                                    <ActivityIndicator color="#fff" />
+                                :
+                                    <Text style={styles.buttonText}>Update</Text>
+                           }
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
                :
                 <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                    <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Login')} >
-                        Login
-                    </Button>
+                    <TouchableOpacity style={styles.button}  onPress={() => login()} >
+                       {
+                             submitting == true
+                            ?
+                                <ActivityIndicator color="#fff" />
+                            :
+                                <Text style={styles.buttonText}>Login</Text>
+                       }
+                    </TouchableOpacity>
                 </View>
             }
         </View>
@@ -176,4 +188,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.1)',
     marginVertical: 20
   },
+  button:{
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
+  },
+  buttonText:{
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
+    color: '#fff'
+  }
 });

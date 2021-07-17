@@ -28,6 +28,7 @@ export default function SendGiftScreen({ navigation, route }) {
                                                     address: '',
                                                     suite_no: '' ,
                                                 });
+  const [ submitting, setSubmitting ] = useState(false);
 
   useEffect(() => {
     getUserDetails();
@@ -64,7 +65,7 @@ export default function SendGiftScreen({ navigation, route }) {
     setFetchingContact(true);
     const { data } = await Contacts.getContactsAsync({
       fields: [Contacts.Fields.PhoneNumbers],
-      pageSize: 100
+      pageSize: 300
     });
     setContacts(data);
     if (data.length > 0) { 
@@ -73,6 +74,7 @@ export default function SendGiftScreen({ navigation, route }) {
     }
     setFetchingContact(false);
   }
+
   const pickAllContact = async () => {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -82,7 +84,7 @@ export default function SendGiftScreen({ navigation, route }) {
       setAllFetchingContact(true);
       const { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
-        pageSize: 100
+        pageSize: 300
       });
       setContacts(data);
       var allContacts = [];
@@ -95,6 +97,7 @@ export default function SendGiftScreen({ navigation, route }) {
       }
       setAllFetchingContact(false);
   }
+
   const chooseItem = (phone, index) => {
     if(selectedContact.includes(phone)){
       var value = phone
@@ -137,6 +140,7 @@ export default function SendGiftScreen({ navigation, route }) {
         item_id: selectedItem.id,
         recipients: selectedContact
     }
+    setSubmitting(true);
     fetch(`${live_url}gift/sendGift`,{
              method: 'POST',
              headers: {
@@ -150,8 +154,8 @@ export default function SendGiftScreen({ navigation, route }) {
          console.log(json);
           if(json.status == true){
           }else{
-//            setMessage(json.responseMessage);
-//            setVisible(true)
+            setMessage(json.message);
+            setVisible(true)
           }
        })
        .catch(error => console.error(error))
@@ -163,8 +167,7 @@ export default function SendGiftScreen({ navigation, route }) {
         <StatusBar style="auto" />
         <View style={styles.header}>
           <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
-          <Text style={styles.headerText}>Send Gift</Text> 
-          {/* <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} /> */}
+          <Text style={styles.headerText}>Send Gift</Text>
           <View></View>
         </View>
         <View style={styles.body}>
@@ -191,43 +194,58 @@ export default function SendGiftScreen({ navigation, route }) {
                           </Button>
                         }
                     </View>
-
                     <ScrollView style={{ width: '100%' }}>  
                       {
                         selectedContact.length > 0 &&
-                        selectedContact.map((item, index) => (
-                          <View style={styles.listCon} key={index}>
-                              <Text  style={styles.listConText}>{ item }</Text>
-                              <Ionicons name="close-sharp" size={24} color="#b22234" onPress={() => removeItem(item) }  />
-                          </View>
-                        ))
+                        selectedContact.map((item, index) => {
+                           if(item.name == null){
+                               return null
+                           }
+                           return(
+                                  <View style={styles.listCon} key={index}>
+                                      <Text  style={styles.listConText}>{ item }</Text>
+                                      <Ionicons name="close-sharp" size={24} color="#b22234" onPress={() => removeItem(item) }  />
+                                  </View>
+                            )}
+                        )
                       }
                     </ScrollView>  
                 </View> 
             </View> 
             
-            <View style={{ zIndex: -1, width: '80%', alignSelf: 'center', marginTop: 20,  }}>                  
-                <Button disabled={ selectedContact.length == 0 } mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Gift')} >
-                    Send Gift
-                </Button>
+            <View style={{ zIndex: -1, width: '80%', alignSelf: 'center', marginTop: 20,  }}>
+                <TouchableOpacity disabled={ selectedContact.length == 0 }  style={styles.button}  onPress={() => sendFreeGifts()} >
+                   {
+                         submitting == true
+                        ?
+                            <ActivityIndicator color="#fff" />
+                        :
+                            <Text style={styles.buttonText}>Send Gift</Text>
+                   }
+                </TouchableOpacity>
             </View>
         </View>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
           <ScrollView style={{ width: '100%' }}>
             {
               contacts.length > 0 &&
-              contacts.map((item, index) => (
-                <View style={styles.listCon} key={index}>
-                    <Text style={styles.listConText}>{ item.name }</Text>
-                    <TouchableOpacity onPress={() => chooseItem(item.phoneNumbers[0].number, index) } style={ item.selected ? [styles.listConButton, { backgroundColor: '#000' }]  : styles.listConButton}></TouchableOpacity>
-                </View>
-              ))
+              contacts.map((item, index) => {
+                  if(item.name == null){
+                      return null
+                  }
+                  return(
+                    <View style={styles.listCon} key={index}>
+                        <Text style={styles.listConText}>{ item.name }</Text>
+                        <TouchableOpacity onPress={() => chooseItem(item.phoneNumbers[0].number, index) } style={ item.selected ? [styles.listConButton, { backgroundColor: '#000' }]  : styles.listConButton}></TouchableOpacity>
+                    </View>
+                  )}
+              )
             }
           </ScrollView>
-          <View style={{ zIndex: -1, width: '80%', alignSelf: 'center', marginTop: 20,  }}>                  
-                <Button mode="outlined" color="#b22234" style={styles.button}  onPress={() => hideModal() } >
-                    Choose Selected
-                </Button>
+          <View style={{ zIndex: -1, width: '80%', alignSelf: 'center', marginTop: 20,  }}>
+                <TouchableOpacity style={styles.button}  onPress={() => hideModal()} >
+                   <Text style={styles.buttonText}>Choose Selected</Text>
+                </TouchableOpacity>
             </View>
         </Modal>
     </View>
@@ -294,5 +312,19 @@ const styles = StyleSheet.create({
     borderColor: 5,
     borderWidth: .5,
     borderColor: 'grey'
+  },
+  button:{
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
+  },
+  buttonText:{
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
+    color: '#fff'
   }
 });

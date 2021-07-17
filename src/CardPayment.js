@@ -205,9 +205,15 @@ export default function makeCardPaymentScreen({ navigation, route }){
            </Text>
 
             <View style={{ width: '100%', marginTop: 20 }}>
-                <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => proceedToPay() } >
-                    Confirm Payment
-                </Button>
+               <TouchableOpacity style={[styles.button]}  onPress={() => proceedToPay() } >
+                    {
+                             submitting == true
+                        ?
+                            <ActivityIndicator color="#fff" />
+                        :
+                            <Text style={styles.buttonText}>Confirm Payment</Text>
+                   }
+               </TouchableOpacity>
             </View>
 
           </View>
@@ -265,10 +271,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
   },
 });

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Pressable, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Pressable, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';  
 import { Button, TextInput, Snackbar  } from 'react-native-paper'; 
@@ -19,6 +19,7 @@ export default function LoginScreen({ navigation }) {
                                                 });
  
   const onDismissSnackBar = () => { setMessage(''); setVisible(false) };
+
   const login = async () => {
     if( userDetails.email == "" || 
         userDetails.password == ""    ){
@@ -96,9 +97,15 @@ export default function LoginScreen({ navigation }) {
               <Text style={{  fontSize: 12, textAlign: 'center', marginBottom: 20, fontFamily: 'Montserrat-Regular' }}>Dont have an account? <Text style={{ fontFamily: 'Montserrat-Bold', color: '#b22234' }}>Register</Text></Text>
             </Pressable> 
             
-            <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => login()} >
-              Login
-            </Button>
+            <TouchableOpacity style={styles.button}  onPress={() => login()} >
+               {
+                     submitting == true
+                    ?
+                        <ActivityIndicator color="#fff" />
+                    :
+                        <Text style={styles.buttonText}>Login</Text>
+               }
+            </TouchableOpacity>
           </View>
         </View>
         <Snackbar
@@ -166,10 +173,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
   }
 });

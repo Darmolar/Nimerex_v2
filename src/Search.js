@@ -139,9 +139,12 @@ export default function SearchScreen({ navigation }) {
                                     <Text style={styles.slideProductConTitle}>{ item.name }</Text>
                                     <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>
                                     <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
-                                        <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
-                                            + Subscription
-                                        </Button>
+                                         <Button onPress={() => addToSavedItem(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
+                                              <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
+                                          </Button>
+                                          <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                                              + Cart
+                                          </Button>
                                     </View>
                                 </View>
                             </Pressable>

@@ -67,7 +67,7 @@ export default function SubscriptionScreen({ navigation }) {
       var new_payment_data = new FormData;
       new_payment_data.append('user_id', userDetails.id);
       new_payment_data.append('id', item.id);
-        fetch(`${live_url}subscription/create`,{
+        fetch(`${live_url}subscription/delete`,{
          method: 'POST',
          headers: {
            Accept: 'application/delete',
@@ -79,6 +79,8 @@ export default function SubscriptionScreen({ navigation }) {
           .then((json) => {
             if(json.status == true){
                 alert(json.message);
+                hideModal();
+                getUserDetails();
             }else{
                 alert(json.message);
                 return false;
@@ -136,13 +138,13 @@ export default function SubscriptionScreen({ navigation }) {
         </View>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
           <View style={styles.listCon}>
-             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('EditNewSubscription', { item: selected })} >
+             <TouchableOpacity style={styles.actionButton} onPress={() => { hideModal(); navigation.navigate('EditNewSubscription', { item: selected }) } } >
                  <Text style={styles.actionButtonText}>Edit</Text>
              </TouchableOpacity>
-             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('SubscriptionProducts', { item: selected })} >
+             <TouchableOpacity style={styles.actionButton} onPress={() => { hideModal(); navigation.navigate('SubscriptionProducts', { item: selected }) } } >
                  <Text style={styles.actionButtonText}>Add Product(s)</Text>
              </TouchableOpacity>
-             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('SubscriptionCart', { item: selected })}>
+             <TouchableOpacity style={styles.actionButton} onPress={() => { hideModal(); navigation.navigate('SubscriptionCart', { item: selected }) } }>
                  <Text style={styles.actionButtonText}>View Product(s)</Text>
              </TouchableOpacity>
              <TouchableOpacity style={styles.actionButton} onPress={() => deleteSubs(selected) } >

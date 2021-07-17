@@ -23,9 +23,10 @@ export default function ResponseScreen({ navigation, route }){
         <View style={styles.container}>
             <Image source={require('../assets/success.jpg')} style={{ width: 300, height: 300, }} />
             <Text style={{ marginTop: 20, fontSize: 20, fontFamily: 'Montserrat-Light', color: '#000' }} >{ response.message }</Text>
-            <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('DashboardTabs', { screen: 'Home' }) } >
-                Proceed
-            </Button>
+
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DashboardTabs', { screen: 'Home' }) }  >
+                <Text style={styles.buttonText}>Proceed</Text>
+             </TouchableOpacity>
         </View>
       );
 }
@@ -41,11 +42,14 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    backgroundColor: '#b22234',
+    borderRadius: 10,
+    marginVertical: 20,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
   }
 });

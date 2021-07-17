@@ -301,10 +301,16 @@ export default function BillingInfoScreen({ navigation }) {
               }}>
               { message }
             </Snackbar>
-            <View style={{ width: '100%' }}>                  
-                <Button loading={submitting} mode="contained" color="#b22234" style={styles.button}  onPress={() => updateInfo() } >
-                    Update
-                </Button>
+            <View style={{ width: '100%' }}>
+               <TouchableOpacity style={[styles.button]}  onPress={() => updateInfo() } >
+                    {
+                             submitting == true
+                        ?
+                            <ActivityIndicator color="#fff" />
+                        :
+                            <Text style={styles.buttonText}>Update</Text>
+                   }
+               </TouchableOpacity>
             </View>
           </ScrollView>
         </View>
@@ -357,10 +363,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
   },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
-  } 
+  },
 });

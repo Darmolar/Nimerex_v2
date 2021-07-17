@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, ImageBackground, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
 import { Button, TextInput, DataTable, RadioButton   } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
@@ -277,75 +277,44 @@ export default function PaymentScreen({ navigation, route }) {
                         </DataTable>
                     </View>
                     <View style={{ width: '95%', alignSelf: 'center', marginVertical: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                       <Text style={{ width: '45%', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                           <RadioButton
-                              color="#b22234"
-                              value="card"
-                              status={ checked === 'card' ? 'checked' : 'unchecked' }
-                              onPress={() => setChecked('card')}
-                            />
-                            Card Payment
-                       </Text>
-                       <Text style={{ width: '45%', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                           <RadioButton
-                               color="#b22234"
-                               value="googlePay"
-                               status={ checked === 'googlePay' ? 'checked' : 'unchecked' }
-                               onPress={() => setChecked('googlePay')}
-                             />
-                             Google Pay
-                       </Text>
-                    </View>
-                    <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                        {
-                            checked === 'card'
-                            ?
-                                <Button disabled={billingInfo.phone === '' ||
-                                                  billingInfo.email === '' ||
-                                                  billingInfo.suburb_or_town === '' ||
-                                                  billingInfo.state_or_territory === '' ||
-                                                  billingInfo.post_code === '' ||
-                                                  billingInfo.full_address === '' ||
-                                                  billingInfo.suite_no === '' }
-                                          mode="contained"
-                                          color="#b22234"
-                                          style={styles.button}
-                                          onPress={() => navigation.navigate('makeCardPayment', {
-                                                                              totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
-                                                                              carts: carts,
-                                                                              fax:fax,
-                                                                              orders: orders,
-                                                                              sub_total: cartTotal,
-                                                                              shipping_fee: shippingInfo,
-                                                                              billingInfo: billingInfo.id
-                                                                            })
-                                                                          } >
-                                    Confirm payment
-                                </Button>
-                            :
-                                <Button disabled={billingInfo.phone === '' ||
-                                                  billingInfo.email === '' ||
-                                                  billingInfo.suburb_or_town === '' ||
-                                                  billingInfo.state_or_territory === '' ||
-                                                  billingInfo.post_code === '' ||
-                                                  billingInfo.full_address === '' ||
-                                                  billingInfo.suite_no === '' }
-                                          mode="contained"
-                                          color="#b22234"
-                                          style={styles.button}
-                                          onPress={() => navigation.navigate('GooglePayment', {
-                                                                              totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
-                                                                              carts: carts,
-                                                                              fax:fax,
-                                                                              orders: orders,
-                                                                              sub_total: cartTotal,
-                                                                              shipping_fee: shippingInfo,
-                                                                              billingInfo: billingInfo.id
-                                                                            })
-                                                                          } >
-                                    Confirm payment
-                                </Button>
-                        }
+                       <TouchableOpacity
+                                           disabled={billingInfo.phone === '' ||
+                                                                                             billingInfo.email === '' ||
+                                                                                             billingInfo.suburb_or_town === '' ||
+                                                                                             billingInfo.state_or_territory === '' ||
+                                                                                             billingInfo.post_code === '' ||
+                                                                                             billingInfo.full_address === '' ||
+                                                                                             billingInfo.suite_no === '' }
+                                           style={[styles.button, { width: '45%' }]}
+                                           onPress={() =>  navigation.navigate('makeCardPayment', {
+                                                                                                                                                                                                                        totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                                                                                                                                                                        carts: carts,
+                                                                                                                                                                                                                        fax:fax,
+                                                                                                                                                                                                                        orders: orders,
+                                                                                                                                                                                                                        sub_total: cartTotal,
+                                                                                                                                                                                                                        shipping_fee: shippingInfo,
+                                                                                                                                                                                                                        billingInfo: billingInfo.id
+                                                                                                                                                                                                                      })} >
+                            <Text style={styles.buttonText}>Card Payment</Text>
+                       </TouchableOpacity>
+                       <TouchableOpacity disabled={billingInfo.phone === '' ||
+                                                                                           billingInfo.email === '' ||
+                                                                                           billingInfo.suburb_or_town === '' ||
+                                                                                           billingInfo.state_or_territory === '' ||
+                                                                                           billingInfo.post_code === '' ||
+                                                                                           billingInfo.full_address === '' ||
+                                                                                           billingInfo.suite_no === '' }
+                                     style={[styles.button, { width: '45%', backgroundColor: '#000' }]}  onPress={() =>  navigation.navigate('GooglePayment', {
+                                                                                                                                      totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                                                                                      carts: carts,
+                                                                                                                                      fax:fax,
+                                                                                                                                      orders: orders,
+                                                                                                                                      sub_total: cartTotal,
+                                                                                                                                      shipping_fee: shippingInfo,
+                                                                                                                                      billingInfo: billingInfo.id
+                                                                                                                                    })} >
+                          <ImageBackground source={require('../assets/gpay.png')} resizeMode='contain' style={{ width: '90%', height: '90%' }} />
+                       </TouchableOpacity>
                     </View>
                 </>
             :
@@ -417,6 +386,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Montserrat-Bold',
     color: '#000'
+  },
+  button:{
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
+  },
+  buttonText:{
+    fontSize: 12,
+    fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
+    color: '#fff'
   },
   billingCon:{
     width,

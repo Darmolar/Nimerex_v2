@@ -192,9 +192,11 @@ export default function CartScreen({ navigation }) {
           </View>
           
             <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                <Button disabled={ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))) < 1 } mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Payment', { carts })} >
-                    Proceed to payment
-                </Button>
+                <TouchableOpacity disabled={ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))) < 1 }  style={styles.button}  onPress={() => navigation.navigate('Payment', { carts }) } >
+                   {
+                      <Text style={styles.buttonText}>Proceed to payment</Text>
+                   }
+                </TouchableOpacity>
             </View>
         </ScrollView>
     </View>
@@ -273,9 +275,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button:{
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#b22234',
+    borderRadius: 10,
+  },
   buttonText:{
     fontSize: 12,
     fontFamily: 'Montserrat-Medium',
+    textTransform: 'capitalize',
     color: '#fff'
-  } 
+  }
 });
