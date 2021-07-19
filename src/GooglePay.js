@@ -30,7 +30,7 @@ export default function GooglePaymentScreen({ navigation, route }){
     const [ visible, setVisible ] = React.useState(false);
     const [ message, setMessage ] = useState('');
     const [ submitting, setSubmitting ] = useState(false);
-    const [ canUse, setCanUse ] = useState(false);
+    const [ canUse, setCanUse ] = useState(true);
     const [ cartItem, setItem ] = useState(orders);
     const [ order_items, setOrder_items ] = useState({});
 
@@ -98,6 +98,7 @@ export default function GooglePaymentScreen({ navigation, route }){
             if (ready) {
               setSubmitting(true)
               console.log("Can use adnroid pay");
+              setCanUse(true);
               // Request payment token
               GooglePay.requestPayment(requestData)
                 .then((response) => {
@@ -178,24 +179,26 @@ export default function GooglePaymentScreen({ navigation, route }){
             }else{
               setSubmitting(false);
               console.log("Cannot use android pay");
+              setCanUse(false);
             }
         })
       }
 
     return (
         <View style={styles.container}>
-            <ActivityIndicator color="#000" size="large" />
+            {
+                canUse &&
+                <ActivityIndicator color="#000" size="large" />
+            }
             <Snackbar
-              visible={visible}
-              onDismiss={onDismissSnackBar}
+              visible={!canUse}
               action={{
                 label: 'Close',
                 onPress: () => {
-                  setMessage('');
-                  setVisible(false);
+                    navigation.goBack();
                 },
               }}>
-              { message }
+              Cannot use google pay. Please use other payment option.
             </Snackbar>
         </View>
       );

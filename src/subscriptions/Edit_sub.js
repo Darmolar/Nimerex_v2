@@ -84,9 +84,9 @@ export default function EditNewSubscriptionScreen({ navigation, route }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={20} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Edit SubScription </Text>
-          {/* <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} /> */}
+          {/* <MaterialCommunityIcons name="cart-off" size={20} color="#4BA716" size={26} /> */}
           <View></View>
         </View>
         <View style={styles.body}>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

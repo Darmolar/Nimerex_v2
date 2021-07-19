@@ -15,7 +15,7 @@ export default function DashboardTabs() {
   return (
     <Tab.Navigator
         initialRouteName="Home"
-        activeColor="#b22234"
+        activeColor="#4BA716"
         inactiveColor="#000"
         barStyle={{ backgroundColor: '#fff', paddingBottom: 5 }}
     >
@@ -23,7 +23,7 @@ export default function DashboardTabs() {
         options={{
             tabBarLabel: '',
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="home" color={focused ? "#b22234" : '#000'} size={26} />
+              <MaterialCommunityIcons name="home" color={focused ? "#4BA716" : '#000'} size={26} />
             ),
           }}
         /> 
@@ -31,7 +31,7 @@ export default function DashboardTabs() {
         options={{
             tabBarLabel: '',
             tabBarIcon: ({ color, focused }) => ( 
-              <Feather name="search" size={24} color={focused ? "#b22234" : '#000'} size={26}/>
+              <Feather name="search" size={24} color={focused ? "#4BA716" : '#000'} size={26}/>
             ),
           }}
       /> 
@@ -39,7 +39,7 @@ export default function DashboardTabs() {
         options={{
             tabBarLabel: '',
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="cart-outline" color={focused ? "#b22234" : '#000'} size={26} />
+              <MaterialCommunityIcons name="cart-outline" color={focused ? "#4BA716" : '#000'} size={26} />
             ),
           }}
       /> 
@@ -47,7 +47,7 @@ export default function DashboardTabs() {
         options={{
             tabBarLabel: '',
             tabBarIcon: ({ color, focused }) => (
-              <MaterialCommunityIcons name="account" color={focused ? "#b22234" : '#000'} size={26} />
+              <MaterialCommunityIcons name="account" color={focused ? "#4BA716" : '#000'} size={26} />
             ),
           }}
       />       

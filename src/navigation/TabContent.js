@@ -47,7 +47,7 @@ function TabContent(props) {
                 style={{ width: 30, height: 30 }}
                 borderRadius={30}
             />
-            <Text style={{ left: 10, color: '#b22234', fontSize: 10, fontFamily: 'Montserrat-Bold' }}>{ userDetails.username }</Text>
+            <Text style={{ left: 10, color: '#4BA716', fontSize: 10, fontFamily: 'Montserrat-Bold' }}>{ userDetails.username }</Text>
         </View> 
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('DashboardTabs', { screen: 'Home' }) }>
             <Text style={styles.buttonText}>Home</Text>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#b22234',
+        backgroundColor: '#4BA716',
         borderRadius: 10,
         alignSelf: 'center',
         marginTop: 30,

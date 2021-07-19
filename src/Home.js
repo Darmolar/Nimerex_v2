@@ -99,9 +99,9 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={24} color="#b22234" onPress={() => navigation.toggleDrawer() }  />
+          <MaterialCommunityIcons name="menu" size={24} color="#4BA716" onPress={() => navigation.toggleDrawer() }  />
           <Text style={styles.headerText}>Nimerex</Text>
-          <Feather name="search" size={24} color="#b22234" size={26} onPress={() => navigation.navigate('Search') }  />
+          <Feather name="search" size={24} color="#4BA716" size={26} onPress={() => navigation.navigate('Search') }  />
         </View>
         <View style={styles.body}>
           <ScrollView style={{ width, marginBottom: 100 }}> 
@@ -127,7 +127,7 @@ export default function HomeScreen({ navigation }) {
                       <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={styles.productListConTitle}>{ item.replace('_',' ') }</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('Category', { category: allProducts["category"][item] }) }>
-                          <Text style={[styles.productListConTitle, { color: '#b22234', fontFamily: 'Montserrat-Regular', fontSize: 12, right: 10  }]}>view more</Text>
+                          <Text style={[styles.productListConTitle, { color: '#4BA716', fontFamily: 'Montserrat-Regular', fontSize: 12, right: 10  }]}>view more</Text>
                         </TouchableOpacity>
                       </View>
                       <ScrollView style={styles.productListConSlides} horizontal showsHorizontalScrollIndicator={false} >
@@ -256,13 +256,13 @@ const styles = StyleSheet.create({
   slideProductConPrice:{
     fontSize: 12,
     fontFamily: 'Montserrat-Light',
-    color: 'blue',
+    color: '#4BA716',
   },
   slideProductConButton:{
     width: '50%',
     height: 35,
     color: '#fff',
-    backgroundColor: 'blue'
+    backgroundColor: '#4BA716'
   },  
   addCon:{
     width, 

@@ -164,9 +164,9 @@ export default function PaymentScreen({ navigation, route }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={20} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Payment</Text> 
-          <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} />
+          <MaterialCommunityIcons name="cart-off" size={20} color="#4BA716" size={26} />
         </View>
         <ScrollView style={styles.body}>
             {
@@ -176,7 +176,7 @@ export default function PaymentScreen({ navigation, route }) {
                         <View style={{ alignSelf: 'center', width: '95%', flexDirection: 'row', justifyContent: 'space-between', }}>
                             <Text style={{ height: 50, fontSize: 15, color: '#000', fontFamily: 'Montserrat-Regular' }}>Shipping Information</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('BillingInfo')}  >
-                                <Text style={{ height: 50, fontSize: 12, color: '#b22234', fontFamily: 'Montserrat-Bold' }}>Update</Text>
+                                <Text style={{ height: 50, fontSize: 12, color: '#4BA716', fontFamily: 'Montserrat-Bold' }}>Update</Text>
                             </TouchableOpacity>
                         </View>
                         {
@@ -189,52 +189,70 @@ export default function PaymentScreen({ navigation, route }) {
                             billingInfo.suite_no !== '' )
                             ?
                             <View style={{ width: '100%'}}>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Suite No</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.suite_no }</DataTable.Cell>
-                                </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Town</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.suburb_or_town }</DataTable.Cell>
-                                </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>State</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.state_or_territory }</DataTable.Cell>
-                                </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Country</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.country }</DataTable.Cell>
-                                </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Post Code</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.post_code }</DataTable.Cell>
-                                </DataTable.Row>
-                                <View style={{ padding: 15 }}>
-                                    <Collapse>
-                                        <CollapseHeader>
-                                            <Text style={[styles.itemTitle, {fontSize: 15, color: "#b22234", fontFamily: 'Montserrat-Medium', }]} >Full Address</Text>
-                                        </CollapseHeader>
-                                        <CollapseBody>
-                                          <View style={{ paddingTop: 20 }}>
-                                            <Text style={[styles.itemTitle, {fontSize: 14, fontFamily: 'Montserrat-Medium', }]}>{ billingInfo.full_address }</Text>
-                                          </View>
-                                        </CollapseBody>
-                                    </Collapse>
-                                </View>
+                                <Collapse>
+                                    <CollapseHeader>
+                                        <Text style={[styles.itemTitle, {fontSize: 15, color: "#4BA716", fontFamily: 'Montserrat-Medium', }]} >Full Address</Text>
+                                    </CollapseHeader>
+                                    <CollapseBody>
+                                      <DataTable.Row>
+                                        <DataTable.Cell>
+                                          <Text style={styles.itemTitle}>Suite No</Text>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell numeric>
+                                            <Text style={styles.itemTitle}>
+                                                { billingInfo.suite_no }
+                                            </Text>
+                                        </DataTable.Cell>
+                                      </DataTable.Row>
+                                      <DataTable.Row>
+                                        <DataTable.Cell>
+                                          <Text style={styles.itemTitle}>Town</Text>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell numeric>
+                                            <Text style={styles.itemTitle}>
+                                                { billingInfo.suburb_or_town }
+                                            </Text>
+                                        </DataTable.Cell>
+                                      </DataTable.Row>
+                                      <DataTable.Row>
+                                        <DataTable.Cell>
+                                          <Text style={styles.itemTitle}>State</Text>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell numeric>
+                                            <Text style={styles.itemTitle}>
+                                                { billingInfo.state_or_territory }
+                                            </Text>
+                                        </DataTable.Cell>
+                                      </DataTable.Row>
+                                      <DataTable.Row>
+                                        <DataTable.Cell>
+                                          <Text style={styles.itemTitle}>Country</Text>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell numeric>
+                                            <Text style={styles.itemTitle}>
+                                                { billingInfo.country }
+                                            </Text>
+                                        </DataTable.Cell>
+                                      </DataTable.Row>
+                                      <DataTable.Row>
+                                        <DataTable.Cell>
+                                          <Text style={styles.itemTitle}>Post Code</Text>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell numeric>
+                                            <Text style={styles.itemTitle}>
+                                                { billingInfo.post_code }
+                                            </Text>
+                                        </DataTable.Cell>
+                                      </DataTable.Row>
+                                      <View style={{ paddingTop: 20 }}>
+                                        <Text style={[styles.itemTitle, {fontSize: 14, fontFamily: 'Montserrat-Bold', }]}>{ billingInfo.full_address }</Text>
+                                      </View>
+                                    </CollapseBody>
+                                </Collapse>
                             </View>
                             :
                             <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                                <Button mode="contained" color="#b22234" style={styles.button} onPress={() => navigation.navigate('BillingInfo') } >
+                                <Button mode="contained" color="#4BA716" style={styles.button} onPress={() => navigation.navigate('BillingInfo') } >
                                     Update Billing Info
                                 </Button>
                             </View>
@@ -244,21 +262,35 @@ export default function PaymentScreen({ navigation, route }) {
                         <DataTable>
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Sub Total</Text>
+                                <Text>Order Summary</Text>
                               </DataTable.Cell>
-                              <DataTable.Cell numeric>{'\u0024'}{ cartTotal.toFixed(2) }</DataTable.Cell>
+                              <DataTable.Cell numeric>  </DataTable.Cell>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                              <DataTable.Cell>
+                                <Text style={styles.itemTitle}>Sub Total</Text>
+                              </DataTable.Cell>
+                              <DataTable.Cell numeric>
+                                <Text style={styles.itemTitle}>
+                                    {'\u0024'}{ cartTotal.toFixed(2) }
+                                 </Text>
+                              </DataTable.Cell>
                           </DataTable.Row>
 
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Tax</Text>
+                                <Text style={styles.itemTitle}>Tax</Text>
                               </DataTable.Cell>
-                              <DataTable.Cell numeric>{'\u0024'} { ((Number(fax)/ 100) * Number(cartTotal)).toFixed(2) } </DataTable.Cell>
+                              <DataTable.Cell numeric>
+                                 <Text style={styles.itemTitle}>
+                                    {'\u0024'} { ((Number(fax)/ 100) * Number(cartTotal)).toFixed(2) }
+                                 </Text>
+                              </DataTable.Cell>
                           </DataTable.Row>
 
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Shipping Options</Text>
+                              <Text>Shipping Methods</Text>
                               </DataTable.Cell>
                               <DataTable.Cell numeric>  </DataTable.Cell>
                           </DataTable.Row>
@@ -277,17 +309,19 @@ export default function PaymentScreen({ navigation, route }) {
                                                  <Text style={[styles.itemTitle, { fontSize: 13, left: 20 }]}>{ shippingInfo[item].value }</Text>
                                              </View>
                                           </DataTable.Cell>
-                                          <DataTable.Cell numeric>{'\u0024'} { shippingInfo[item].cost }</DataTable.Cell>
+                                          <DataTable.Cell numeric>
+                                            <Text style={styles.itemTitle}>{'\u0024'} { shippingInfo[item].cost }</Text>
+                                          </DataTable.Cell>
                                       </DataTable.Row>
                                 )
                             })
                           }
                           <DataTable.Row>
                               <DataTable.Cell>
-                                <Text style={[styles.itemTitle, { color: '#b22234', fontFamily: 'Montserrat-Medium' }]}>Total Payable</Text>
+                                <Text style={[styles.itemTitle, { color: '#4BA716', fontFamily: 'Montserrat-Bold' }]}>Total Payable</Text>
                               </DataTable.Cell>
                               <DataTable.Cell numeric>
-                                <Text style={{ color: '#b22234', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
+                                <Text style={{ color: '#4BA716', fontFamily: 'Montserrat-Bold' }}>{'\u0024'}{ ( ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
                               </DataTable.Cell>
                           </DataTable.Row>
                         </DataTable>
@@ -372,7 +406,12 @@ const styles = StyleSheet.create({
   cartCon:{
     padding: 10,
     marginTop: 10,
-  }, 
+  },
+  itemTitle:{
+    fontSize: 14,
+    fontFamily: 'Montserrat-Bold',
+    color: '#000'
+  },
   button:{
     width: '100%',
     height: 50,
@@ -409,7 +448,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

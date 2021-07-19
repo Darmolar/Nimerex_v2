@@ -106,14 +106,14 @@ export default function SearchScreen({ navigation }) {
     <SafeAreaView  style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={24} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={24} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Search 
               {
                 loadingMore &&
                 <ActivityIndicator color="#000" />
               } 
           </Text> 
-          <MaterialCommunityIcons name="filter-plus-outline" size={24} color="#b22234" size={26} onPress={() => showModal() } />
+          <MaterialCommunityIcons name="filter-plus-outline" size={24} color="#4BA716" size={26} onPress={() => showModal() } />
         </View>
         <View style={styles.body}>
             <View style={styles.searchCon}>
@@ -122,7 +122,7 @@ export default function SearchScreen({ navigation }) {
                       mode="outlined" 
                       style={{ height: 30, fontSize: 12, width: '100%', }} 
                       label="Search ...."
-                      left={<TextInput.Icon name="layers-search"  color="#b22234" />}
+                      left={<TextInput.Icon name="layers-search"  color="#4BA716" />}
                     />
                 </View>
             </View>
@@ -246,13 +246,13 @@ const styles = StyleSheet.create({
   slideProductConPrice:{
     fontSize: 12,
     fontFamily: 'Montserrat-Light',
-    color: 'blue',
+    color: '#4BA716',
   },
   slideProductConButton:{
     width: '50%',
     height: 35,
     color: '#fff',
-    backgroundColor: 'blue'
+    backgroundColor: '#4BA716'
   },
   slideProductConButtonText:{
     fontSize: 12,

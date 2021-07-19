@@ -195,7 +195,7 @@ export default function SendGiftScreen({ navigation, route }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={20} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Send Gift</Text>
           <View></View>
         </View>
@@ -207,19 +207,19 @@ export default function SendGiftScreen({ navigation, route }) {
                         {
                           fetchingContact
                           ?
-                          <ActivityIndicator color="#b22234" size="large" />
+                          <ActivityIndicator color="#4BA716" size="large" />
                           :
-                          <Button mode="outlined" color="#b22234" style={{ width: '45%', marginVertical: 20, justifyContent:'center' }}  onPress={() => pickContact() } >
-                              <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select <AntDesign name="contacts" size={18} color="#b22234"/> </Text>
+                          <Button mode="outlined" color="#4BA716" style={{ width: '45%', marginVertical: 20, justifyContent:'center' }}  onPress={() => pickContact() } >
+                              <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select <AntDesign name="contacts" size={18} color="#4BA716"/> </Text>
                           </Button>
                         }
                         {
                           allFetchingContact
                           ?
-                          <ActivityIndicator color="#b22234" size="large" />
+                          <ActivityIndicator color="#4BA716" size="large" />
                           :
-                          <Button mode="outlined" color="#b22234" style={{ width: '45%', marginVertical: 20, justifyContent:'center' }}  onPress={() => pickAllContact() } >
-                              <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select All <AntDesign name="contacts" size={18} color="#b22234"/> </Text>
+                          <Button mode="outlined" color="#4BA716" style={{ width: '45%', marginVertical: 20, justifyContent:'center' }}  onPress={() => pickAllContact() } >
+                              <Text style={{ fontSize: 13, fontFamily: 'Montserrat-Medium'}}> Select All <AntDesign name="contacts" size={18} color="#4BA716"/> </Text>
                           </Button>
                         }
                     </View>
@@ -228,7 +228,7 @@ export default function SendGiftScreen({ navigation, route }) {
                         selectedContact.length > 0 &&
                         selectedContact.map((item, index) => {
                            return(
-                                  <Chip mode='outlined' icon="close" style={{ width: '70%', marginVertical: 4 }} selected={true} selectedColor='#b22234' onPress={() => removeItem(item) }>{ item }</Chip>
+                                  <Chip mode='outlined' icon="close" style={{ width: '70%', marginVertical: 4 }} selected={true} selectedColor='#4BA716' onPress={() => removeItem(item) }>{ item }</Chip>
                             )}
                         )
                       }
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

@@ -200,7 +200,7 @@ export default function makeCardPaymentScreen({ navigation, route }){
                </View>
            </View>
            <Text style={{ width: 150, fontFamily: 'Montserrat-Medium', fontSize: 14, justifyContent: 'center', alignSelf: 'flex-end'   }}>
-               <Switch color="#b22234" value={isSwitchOn} onValueChange={onToggleSwitch} />
+               <Switch color="#4BA716" value={isSwitchOn} onValueChange={onToggleSwitch} />
                 Save Card
            </Text>
 
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

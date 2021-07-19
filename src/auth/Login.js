@@ -82,7 +82,7 @@ export default function LoginScreen({ navigation }) {
                 value={userDetails.password}
                 onChangeText={val => setUserDetails({ ...userDetails, password: val })}
                 secureTextEntry={secureText}
-                right={ <TextInput.Icon name={ secureText ? "eye" : "eye-off"  } color="#b22234" onPress={() => setSecureText(!secureText)} />}
+                right={ <TextInput.Icon name={ secureText ? "eye" : "eye-off"  } color="#4BA716" onPress={() => setSecureText(!secureText)} />}
               />
             </View> 
             <Pressable onPress={() => navigation.navigate('Forget_Password')} >
@@ -92,7 +92,7 @@ export default function LoginScreen({ navigation }) {
 
           <View style={{ width: '100%' }}>  
             <Pressable onPress={() => navigation.navigate('Register')} >
-              <Text style={{  fontSize: 12, textAlign: 'center', marginBottom: 20, fontFamily: 'Montserrat-Regular' }}>Dont have an account? <Text style={{ fontFamily: 'Montserrat-Bold', color: '#b22234' }}>Register</Text></Text>
+              <Text style={{  fontSize: 12, textAlign: 'center', marginBottom: 20, fontFamily: 'Montserrat-Regular' }}>Dont have an account? <Text style={{ fontFamily: 'Montserrat-Bold', color: '#4BA716' }}>Register</Text></Text>
             </Pressable> 
             
             <TouchableOpacity style={styles.button}  onPress={() => login()} >
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

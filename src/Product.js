@@ -23,9 +23,9 @@ export default function ProductScreen({ navigation, route }) {
         <SafeAreaView  style={styles.container}>
             <StatusBar style="auto" />
             <View style={styles.header}>
-                <MaterialIcons name="arrow-back-ios" size={24} color="#b22234" onPress={() => navigation.goBack() }   />
+                <MaterialIcons name="arrow-back-ios" size={24} color="#4BA716" onPress={() => navigation.goBack() }   />
                     <Text style={styles.headerText}>{ products['category_name'] }</Text> 
-                <MaterialIcons name="search" color="#b22234" size={26} /> 
+                <MaterialIcons name="search" color="#4BA716" size={26} />
             </View>
             <View style={styles.body}> 
                 <View style={styles.caroselCon}>

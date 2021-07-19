@@ -105,9 +105,9 @@ export default function CartScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={20} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Cart</Text> 
-          <MaterialCommunityIcons name="cart-off" size={20} color="#b22234" size={26} />
+          <MaterialCommunityIcons name="cart-off" size={20} color="#4BA716" size={26} />
         </View>
         <ScrollView style={styles.body}>
 
@@ -180,10 +180,10 @@ export default function CartScreen({ navigation }) {
 
                   <DataTable.Row>
                       <DataTable.Cell>
-                        <Text style={[styles.itemTitle, { color: '#b22234', fontFamily: 'Montserrat-Medium' }]}>Total Payable</Text>
+                        <Text style={[styles.itemTitle, { color: '#4BA716', fontFamily: 'Montserrat-Medium' }]}>Total Payable</Text>
                       </DataTable.Cell>
                       <DataTable.Cell numeric>
-                        <Text style={{ color: '#b22234', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
+                        <Text style={{ color: '#4BA716', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
                       </DataTable.Cell>
                   </DataTable.Row>
 
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

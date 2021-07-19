@@ -101,9 +101,9 @@ export default function SubscriptionScreen({ navigation }) {
     <SafeAreaView  style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={24} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={24} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Subscription</Text>
-          <MaterialCommunityIcons name="plus" size={24} color="#b22234" size={26} />
+          <MaterialCommunityIcons name="plus" size={24} color="#4BA716" size={26} />
         </View>
         <View style={styles.body}> 
             <View style={styles.cartCon}>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     color: '#fff'
   },
   cartCon:{
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     // borderColor: 'grey',
     marginVertical: 10,
     borderRadius: 10,
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     alignItems: 'center',
     justifyContent: 'center',
   },

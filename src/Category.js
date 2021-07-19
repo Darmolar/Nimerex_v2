@@ -6,27 +6,11 @@ import { Button, TextInput } from 'react-native-paper';
 import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network'; 
  
 const { width, height } = Dimensions.get('window');
-   
-const  RenderProductsItem = ({item, index}) => (
-    <Pressable key={index} onPress={() => navigation.navigate('Product', { category: item }) }  style={styles.slideProduct}>
-        <Image source={{ uri: live_url_image+item.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
-        <View style={styles.slideProductCon}>
-            <Text style={styles.slideProductConTitle}>{ item.name }</Text>
-            <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>       
-            <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
-                <Button onPress={() => addToSavedItem(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
-                    <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
-                </Button>
-                <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
-                    + Cart
-                </Button>
-            </View>
-        </View>
-    </Pressable>
-); 
 
 export default function CategoryScreen({ navigation, route }) {
   const [ products, setProducts ] = useState(route.params.category);
+
+  console.log(products.data[0]['category_name'])
 
   const renderItem = ({ item }) => (
     <RenderProductsItem item={item} />
@@ -36,16 +20,35 @@ export default function CategoryScreen({ navigation, route }) {
     <SafeAreaView  style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-            <MaterialCommunityIcons name="menu" size={24} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
-                <Text style={styles.headerText}>{ products[0]['category_name'] }</Text> 
-            <MaterialIcons name="search" color="#b22234" size={26} /> 
+            <MaterialCommunityIcons name="menu" size={24} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
+                <Text style={styles.headerText}>{ products.data[0]['category_name'] }</Text>
+            <MaterialIcons name="search" color="#4BA716" size={26} />
         </View>
         <View style={styles.body}> 
 
             <View style={{ width: width, marginBottom: 100 }}>                
                 <FlatList
                     data={products.data}
-                    renderItem={renderItem}
+                    renderItem={(product, index) => {
+                        var item = product.item;
+                            return(
+                            <Pressable onPress={() => navigation.navigate('Product', { category: item }) }  style={styles.slideProduct}>
+                                <Image source={{ uri: live_url_image+item.images[0].url }} borderRadius={5} resizeMode="contain" style={styles.slideProductImage} />
+                                <View style={styles.slideProductCon}>
+                                    <Text style={styles.slideProductConTitle}>{ item.name }</Text>
+                                    <Text style={styles.slideProductConPrice}>{'\u0024'}{ item.price }</Text>
+                                    <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', justifyContent: 'space-around' }}>
+                                        <Button onPress={() => addToSavedItem(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={[styles.slideProductConButton, { width: '20%' }]}>
+                                            <MaterialCommunityIcons name="heart-outline" size={20} color="#fff" />
+                                        </Button>
+                                        <Button onPress={() => addToCart(item)} uppercase={false} mode="contained" labelStyle={{ fontFamily: 'Montserrat-Medium', }} style={styles.slideProductConButton}>
+                                            + Cart
+                                        </Button>
+                                    </View>
+                                </View>
+                            </Pressable>
+                        )}
+                    }
                     keyExtractor={item => item.id} 
                     horizontal={false}
                     numColumns={2}
@@ -122,13 +125,13 @@ const styles = StyleSheet.create({
   slideProductConPrice:{
     fontSize: 12,
     fontFamily: 'Montserrat-Light',
-    color: 'blue',
+    color: '#4BA716',
   },
   slideProductConButton:{
     width: '50%',
     height: 35,
     color: '#fff',
-    backgroundColor: 'blue'
+    backgroundColor: '#4BA716'
   },
   slideProductConButtonText:{
     fontSize: 12,

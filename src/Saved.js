@@ -38,9 +38,9 @@ export default function SavedScreen({ navigation }) {
     <SafeAreaView  style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={24} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={24} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Saved Item</Text> 
-          <MaterialCommunityIcons name="filter-plus-outline" size={24} color="#b22234" size={26} />
+          <MaterialCommunityIcons name="filter-plus-outline" size={24} color="#4BA716" size={26} />
         </View>
         <View style={styles.body}> 
 
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
   slideProductConPrice:{
     fontSize: 12,
     fontFamily: 'Montserrat-Light',
-    color: 'blue',
+    color: '#4BA716',
   },
   slideProductConButton:{
     width: '50%',
     height: 35,
     color: '#fff',
-    backgroundColor: 'blue'
+    backgroundColor: '#4BA716'
   },
   slideProductConButtonText:{
     fontSize: 12,

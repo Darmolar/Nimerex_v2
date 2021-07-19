@@ -11,7 +11,7 @@ export default function ContactScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color="#b22234" onPress={() => navigation.goBack() }   />
+          <MaterialCommunityIcons name="arrow-left" size={20} color="#4BA716" onPress={() => navigation.goBack() }   />
           <Text style={styles.headerText}>Contact</Text> 
           <View></View>
         </View>
@@ -38,7 +38,7 @@ export default function ContactScreen({ navigation }) {
             </View> 
             
             <View style={{ width: '100%', marginTop: 20 }}>                  
-                <Button mode="contained" color="#b22234" style={styles.button}  onPress={() => navigation.navigate('DashboardTabs', { screen: 'Home' })} >
+                <Button mode="contained" color="#4BA716" style={styles.button}  onPress={() => navigation.navigate('DashboardTabs', { screen: 'Home' })} >
                     Send Direct message
                 </Button>
             </View>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     color: '#fff',
     width: 40,
     height: 40,

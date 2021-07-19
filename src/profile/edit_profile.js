@@ -162,7 +162,7 @@ export default function EditProfileScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color="#b22234" onPress={() => navigation.goBack() }   />
+          <MaterialCommunityIcons name="arrow-left" size={20} color="#4BA716" onPress={() => navigation.goBack() }   />
           <Text style={styles.headerText}>Edit Profile</Text> 
           <View></View>
         </View>
@@ -296,10 +296,9 @@ export default function EditProfileScreen({ navigation }) {
               </ScrollView>
             :
                 <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                    <Button compact={true} mode="contained" color="#b22234" style={styles.button}
-                        onPress={() => navigation.navigate('Login') } >
-                        Login before checkout
-                    </Button>
+                    <TouchableOpacity style={[styles.button]} onPress={() => navigation.navigate('Login') }  >
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
                 </View>
           }
 
@@ -352,7 +351,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{

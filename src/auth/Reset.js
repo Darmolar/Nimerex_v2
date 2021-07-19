@@ -12,7 +12,7 @@ export default function ResetScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.head}>
-            <MaterialIcons name="keyboard-arrow-left" size={24} size={24} color="#b22234" onPress={() => navigation.goBack() }  />
+            <MaterialIcons name="keyboard-arrow-left" size={24} size={24} color="#4BA716" onPress={() => navigation.goBack() }  />
             <Animatable.Text animation="zoomInUp" style={styles.headerText}>Reset password.</Animatable.Text>
             <Animatable.Text animation="zoomInUp" style={styles.headerTexth2}>Hi.</Animatable.Text>
             <Animatable.Text animation="zoomInUp" style={styles.headerTexth2}>Reset password to regain access.</Animatable.Text>
@@ -46,9 +46,9 @@ export default function ResetScreen({ navigation }) {
 
           <View style={{ width: '100%' }}>  
             <Pressable onPress={() => navigation.navigate('Login')} >
-              <Text style={{  fontSize: 12, textAlign: 'center', marginBottom: 20, fontFamily: 'Montserrat-Regular' }}>Already have an account? <Text style={{ fontFamily: 'Montserrat-Bold', color: '#b22234' }}>Login</Text></Text>
+              <Text style={{  fontSize: 12, textAlign: 'center', marginBottom: 20, fontFamily: 'Montserrat-Regular' }}>Already have an account? <Text style={{ fontFamily: 'Montserrat-Bold', color: '#4BA716' }}>Login</Text></Text>
             </Pressable>   
-            <Button mode="contained" uppercase={true} color="#b22234" style={styles.button}  onPress={() => navigation.navigate('Reset')} >
+            <Button mode="contained" uppercase={true} color="#4BA716" style={styles.button}  onPress={() => navigation.navigate('Reset')} >
               Update Password
             </Button>
           </View>

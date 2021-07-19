@@ -11,16 +11,16 @@ export default function ProfileScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="menu" size={20} color="#b22234" onPress={() => navigation.toggleDrawer() }   />
+          <MaterialCommunityIcons name="menu" size={20} color="#4BA716" onPress={() => navigation.toggleDrawer() }   />
           <Text style={styles.headerText}>Profile</Text> 
-          <MaterialCommunityIcons name="logout" size={20} color="#b22234" size={26} />
+          <MaterialCommunityIcons name="logout" size={20} color="#4BA716" size={26} />
         </View>
         <View style={styles.body}>
           <View style={styles.profileCon}>
             <ImageBackground source={require('../assets/img_avatar.png')} borderRadius={130} style={styles.profilePictureCon}>
 
                 <View style={styles.cameraCon}>
-                  <MaterialCommunityIcons name="camera-plus-outline" size={20} color="#b22234" />
+                  <MaterialCommunityIcons name="camera-plus-outline" size={20} color="#4BA716" />
                 </View>
             </ImageBackground>
             <Text  style={styles.profileName}>John Doe</Text>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     borderWidth: .6,
     borderRadius: 130,
-    borderColor: '#b22234'
+    borderColor: '#4BA716'
   },
   profileName:{
     fontSize: 18,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     height: 30, 
     borderRadius: 30,
     borderWidth: .6,
-    borderColor: '#b22234',
+    borderColor: '#4BA716',
     justifyContent: 'center',
     alignItems: 'center',
     right: '7%',
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 35,
     borderBottomWidth: .4,
-    borderColor: '#b22234',
+    borderColor: '#4BA716',
     justifyContent: 'center',
     padding: 10,
     marginVertical: 10

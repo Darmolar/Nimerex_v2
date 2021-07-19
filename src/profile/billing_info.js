@@ -202,7 +202,7 @@ export default function BillingInfoScreen({ navigation }) {
     <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.header}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color="#b22234" onPress={() => navigation.goBack() }   />
+          <MaterialCommunityIcons name="arrow-left" size={20} color="#4BA716" onPress={() => navigation.goBack() }   />
           <Text style={styles.headerText}>Billing Info</Text> 
           <View></View>
         </View>
@@ -289,18 +289,6 @@ export default function BillingInfoScreen({ navigation }) {
                     onChangeText={val => setBillingInfo({ ...billingInfo, full_address: val })}
              />
            </View>
-            <Snackbar
-              visible={visible}
-              onDismiss={onDismissSnackBar}
-              action={{
-                label: 'Close',
-                onPress: () => {
-                  setMessage('');
-                  setVisible(false);
-                },
-              }}>
-              { message }
-            </Snackbar>
             <View style={{ width: '100%' }}>
                <TouchableOpacity style={[styles.button]}  onPress={() => updateInfo() } >
                     {
@@ -313,6 +301,18 @@ export default function BillingInfoScreen({ navigation }) {
                </TouchableOpacity>
             </View>
           </ScrollView>
+            <Snackbar
+              visible={visible}
+              onDismiss={onDismissSnackBar}
+              action={{
+                label: 'Close',
+                onPress: () => {
+                  setMessage('');
+                  setVisible(false);
+                },
+              }}>
+              { message }
+            </Snackbar>
         </View>
     </View>
   );
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#b22234',
+    backgroundColor: '#4BA716',
     borderRadius: 10,
   },
   buttonText:{
