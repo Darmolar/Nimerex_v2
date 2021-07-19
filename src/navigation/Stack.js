@@ -81,7 +81,6 @@ export default function MyStack() {
       <Stack.Screen name="SendGift" component={SendGiftScreen} options={{headerShown: false}} />
 
       <Stack.Screen name="Response" component={ResponseScreen} options={{headerShown: false}} />
-cls
     </Stack.Navigator>
   );
 }

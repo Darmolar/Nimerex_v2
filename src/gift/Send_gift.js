@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, FlatList, TextInput as NewTextInput, SafeAreaView , Pressable, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather, MaterialIcons, AntDesign, Ionicons } from 'react-native-vector-icons';
-import { Button, TextInput, DataTable, Modal } from 'react-native-paper'; 
+import { Button, TextInput, DataTable, Modal, Chip, Snackbar  } from 'react-native-paper';
 import * as Contacts from 'expo-contacts';
 import { live_url, SecureStore } from '../Network';
 
@@ -10,6 +10,8 @@ const { width, height } = Dimensions.get('window');
 
 export default function SendGiftScreen({ navigation, route }) {
   const [ visible, setVisible] = React.useState(false);
+  const [ message, setMessage ] = useState('');
+  const [visible_msg, setVisible_msg] = React.useState(false);
   const [ selectedItem, setSelectedItem ] = useState(route.params.item)
   const [ contacts, setContacts ] = React.useState([]);
   const [ fetchingContact, setFetchingContact ] = React.useState(false);
@@ -29,6 +31,8 @@ export default function SendGiftScreen({ navigation, route }) {
                                                     suite_no: '' ,
                                                 });
   const [ submitting, setSubmitting ] = useState(false);
+
+  const onDismissSnackBar = () => { setMessage(''); setVisible_msg(false) };
 
   useEffect(() => {
     getUserDetails();
@@ -51,7 +55,7 @@ export default function SendGiftScreen({ navigation, route }) {
             setUserDetails(user);
         }
      }
-   }
+  }
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -75,6 +79,26 @@ export default function SendGiftScreen({ navigation, route }) {
     setFetchingContact(false);
   }
 
+  const pickContactMore = async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status !== 'granted') {
+        alert('We require contact permission to read your contacts');
+        return false;
+      }
+      setFetchingContact(true);
+      const { data: moreData } = await Contacts.getContactsAsync({
+        fields: [Contacts.Fields.PhoneNumbers],
+        pageSize: 200,
+        pageOffset: contacts.length
+      });
+      setContacts([ ...data, moreData  ]);
+//      if (data.length > 0) {
+//        showModal();
+//        // console.log(contact[0].phoneNumbers[0].number);
+//      }
+      setFetchingContact(false);
+   }
+
   const pickAllContact = async () => {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -91,7 +115,7 @@ export default function SendGiftScreen({ navigation, route }) {
       console.log(data);
       if (data.length > 0) {
         data.map((item) => {
-            allContacts.push(item.phoneNumbers[0].number)
+            allContacts.push(item.phoneNumbers[0].number);
         });
         setSelectedContacts(allContacts);
       }
@@ -131,36 +155,41 @@ export default function SendGiftScreen({ navigation, route }) {
 
   const sendFreeGifts = async () => {
     if(selectedContact.length == 0){
-        alert('Please select a contact');
+        setMessage('Please select a contact');
+        setVisible_msg(true)
         return false;
     }
-
     var datas = {
         sender_id: userDetails.id,
-        item_id: selectedItem.id,
+        item_id: selectedItem.item_id,
         recipients: selectedContact
     }
+    console.log(datas)
     setSubmitting(true);
-    fetch(`${live_url}gift/sendGift`,{
-             method: 'POST',
-             headers: {
-               Accept: 'application/json',
-               'Content-Type': 'application/json'
-             },
-             body: JSON.stringify(datas)
-           })
+    fetch(`${live_url}gift/sendGift`,
+            {
+                 method: 'POST',
+                 headers: {
+                   Accept: 'application/json',
+                   'Content-Type': 'application/json'
+                 },
+                 body: JSON.stringify(datas)
+            })
        .then(response => response.json())
        .then(async(json) => {
          console.log(json);
           if(json.status == true){
+            setMessage(json.message);
+            setVisible_msg(true);
+            setSelectedContacts([])
           }else{
             setMessage(json.message);
-            setVisible(true)
+            setVisible_msg(true)
           }
        })
        .catch(error => console.error(error))
        .finally(res => setSubmitting(false))
-  }
+    }
 
   return (
     <View style={styles.container}>
@@ -194,18 +223,12 @@ export default function SendGiftScreen({ navigation, route }) {
                           </Button>
                         }
                     </View>
-                    <ScrollView style={{ width: '100%' }}>  
+                    <ScrollView style={{ width: '100%', maxHeight: 200, marginTop: 20 }}>
                       {
                         selectedContact.length > 0 &&
                         selectedContact.map((item, index) => {
-                           if(item.name == null){
-                               return null
-                           }
                            return(
-                                  <View style={styles.listCon} key={index}>
-                                      <Text  style={styles.listConText}>{ item }</Text>
-                                      <Ionicons name="close-sharp" size={24} color="#b22234" onPress={() => removeItem(item) }  />
-                                  </View>
+                                  <Chip mode='outlined' icon="close" style={{ width: '70%', marginVertical: 4 }} selected={true} selectedColor='#b22234' onPress={() => removeItem(item) }>{ item }</Chip>
                             )}
                         )
                       }
@@ -225,21 +248,39 @@ export default function SendGiftScreen({ navigation, route }) {
                 </TouchableOpacity>
             </View>
         </View>
+        <Snackbar
+          visible={visible_msg}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Close',
+            onPress: () => {
+              setMessage('');
+              setVisible_msg(false);
+            },
+          }}>
+          { message }
+        </Snackbar>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.containerStyle}>
           <ScrollView style={{ width: '100%' }}>
             {
               contacts.length > 0 &&
-              contacts.map((item, index) => {
-                  if(item.name == null){
-                      return null
-                  }
-                  return(
-                    <View style={styles.listCon} key={index}>
-                        <Text style={styles.listConText}>{ item.name }</Text>
-                        <TouchableOpacity onPress={() => chooseItem(item.phoneNumbers[0].number, index) } style={ item.selected ? [styles.listConButton, { backgroundColor: '#000' }]  : styles.listConButton}></TouchableOpacity>
-                    </View>
-                  )}
-              )
+              <FlatList
+                  data={contacts}
+                  renderItem={ item => {
+                        if(item.name == null){
+                            return null
+                        }
+                        return(
+                          <View style={styles.listCon} key={index}>
+                              <Text style={styles.listConText}>{ item.name }</Text>
+                              <TouchableOpacity onPress={() => chooseItem(item.phoneNumbers[0].number, index) } style={ item.selected ? [styles.listConButton, { backgroundColor: '#000' }]  : styles.listConButton}></TouchableOpacity>
+                          </View>
+                        )
+                    }
+                   }
+                  keyExtractor={item => item.phoneNumbers[0].number}
+                  onEndReached={() => pickContactMore() }
+              />
             }
           </ScrollView>
           <View style={{ zIndex: -1, width: '80%', alignSelf: 'center', marginTop: 20,  }}>

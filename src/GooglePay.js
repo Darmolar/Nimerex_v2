@@ -17,7 +17,7 @@ GooglePay.setEnvironment(GooglePay.ENVIRONMENT_TEST);
 
 export default function GooglePaymentScreen({ navigation, route }){
     const [ email, setEmail ] = useState('');
-    const { totalPayment, carts, fax, shipping_fee, sub_total, orders, billingInfo } = route.params;
+    const { totalPayment, carts, fax, shipping_fee, sub_total, orders, billingInfo, selectedOption } = route.params;
     const [ userDetails, setUserDetails ] = useState({
                                                     firstname: '',
                                                     lastname: '',
@@ -136,7 +136,7 @@ export default function GooglePaymentScreen({ navigation, route }){
                                   "handling_fee": "0",
                                   "shippingcost": [
                                     {
-                                      "foreign": shipping_fee
+                                      "foreign": selectedOption.cost
                                     }
                                   ],
                                   "payment_option": "Card",
@@ -184,7 +184,7 @@ export default function GooglePaymentScreen({ navigation, route }){
 
     return (
         <View style={styles.container}>
-
+            <ActivityIndicator color="#000" size="large" />
             <Snackbar
               visible={visible}
               onDismiss={onDismissSnackBar}
@@ -204,56 +204,7 @@ export default function GooglePaymentScreen({ navigation, route }){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  head:{
-    width,
-    flex: 1.5,
-    padding: 20,
-    justifyContent: 'center',
-  },
-  body:{
-    width,
-    flex: 2.5,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20,
+    justifyContent: 'center'
   },
-  headerText:{
-    fontSize: 25,
-    fontFamily: 'Montserrat-Bold',
-    top: '5%'
-  },
-  headerTexth2:{
-    fontSize: 20,
-    fontFamily: 'Montserrat-Regular',
-    top: '10%'
-  },
-  formBox:{
-    width: '100%',
-  },
-  formGroup:{
-    width: '100%',
-    height: 50,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    marginVertical: 20
-  },
-  input:{
-    width: '100%',
-    fontSize: 12,
-    fontFamily: 'Montserrat-Medium',
-    color: '#000',
-    left: 10
-  },
-  button:{
-    width: '100%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText:{
-    fontSize: 12,
-    fontFamily: 'Montserrat-Medium',
-    color: '#fff'
-  }
 });

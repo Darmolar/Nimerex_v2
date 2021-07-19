@@ -82,7 +82,6 @@ export default function GiftScreen({ navigation }) {
                         <DataTable.Title >Store</DataTable.Title>  
                         <DataTable.Title numeric>Action</DataTable.Title>
                     </DataTable.Header>
-
                     {
                         gifts.length > 0 &&
                         gifts.map((item, index) => (
@@ -94,13 +93,11 @@ export default function GiftScreen({ navigation }) {
                                     <Text style={styles.itemTitle}>{ item.shop_name }</Text>
                                 </DataTable.Cell>
                                 <DataTable.Cell numeric>
-                                    <MaterialCommunityIcons name="menu" size={20} color="red" onPress={() => navigation.navigate('SendGift', { item: selected }) } style={styles.closeButton} />
+                                    <MaterialCommunityIcons name="account-arrow-right" size={25} color="red" onPress={() => navigation.navigate('SendGift', { item: item }) } style={styles.closeButton} />
                                 </DataTable.Cell>
                             </DataTable.Row>
                         ))
                     }
-
-
                 </DataTable>
             </View>
         </View>

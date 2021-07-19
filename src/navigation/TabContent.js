@@ -75,10 +75,10 @@ function TabContent(props) {
         </TouchableOpacity> 
         <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Terms & conditions</Text>
-        </TouchableOpacity> 
-        <Button style={styles.logOutButton} color="#fff" onPress={() => logout() }>
-            Logout
-        </Button> 
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.logOutButton}  onPress={() => logout()} >
+          <Text style={styles.logOutButtonbuttonText}>Logout</Text>
+        </TouchableOpacity>
       </DrawerContentScrollView>
     );
   }
@@ -98,15 +98,20 @@ const styles = StyleSheet.create({
         fontWeight: '100',
         left: 20
     },
-    logOutButton:{
+      logOutButton:{
         width: '80%',
         height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#b22234',
         borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
         alignSelf: 'center',
-        marginTop: 20,
-        color: '#fff',
-    }, 
+        marginTop: 30,
+      },
+      logOutButtonbuttonText:{
+        fontSize: 12,
+        fontFamily: 'Montserrat-Medium',
+        textTransform: 'capitalize',
+        color: '#fff'
+      }
 });

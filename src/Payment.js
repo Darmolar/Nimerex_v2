@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Image, ImageBackground, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
+import {Collapse,CollapseHeader, CollapseBody, AccordionList} from 'accordion-collapse-react-native';
 import { Button, TextInput, DataTable, RadioButton   } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
@@ -28,7 +29,8 @@ export default function PaymentScreen({ navigation, route }) {
                                                   });
   const [ checked, setChecked ] = React.useState('card');
   const [ orders, setOrder ] = useState({});
-  const [ shippingInfo, setShippingInfo ] = useState(0);
+  const [ shippingInfo, setShippingInfo ] = useState([]);
+  const [ selectedOption, setSelectedOption ] = useState({});
 
   useEffect(() => {
     getFaxs();
@@ -53,7 +55,8 @@ export default function PaymentScreen({ navigation, route }) {
            getShippingOptions(JSON.parse(data).id);
         }
      }else{
-        setIsLoggedIn(false)
+        setIsLoggedIn(false);
+        setLoading(false)
      }
    }
 
@@ -73,31 +76,31 @@ export default function PaymentScreen({ navigation, route }) {
   const getShippingOptions = async (user_id) => {
       var item_data = new Object();
       const promises = carts.map(async (item, index) => {
-                           var id = Math.random().toString(36).substring(1, 20);
-                           await fetch(`${live_url}product/find/${item.id}` )
-                             .then(response => response.json())
-                             .then(async(json) => {
-                               if(json.status == true ){
-                                 var new_item = {
-                                       "rowId": id,
-                                       "id": json.data.products.id,
-                                       "name": json.data.products.name,
-                                       "qty": item.qty,
-                                       "price": json.data.products.price,
-                                       "options": {
-                                         "shop_id": json.data.products.shop_id,
-                                         "weight": json.data.products.item_weight,
-                                         "category_id": json.data.products.category_id,
-                                         "attribute_key": "",
-                                         "attribute_value": ""
-                                       }
-                                     }
-                                 item_data[id] = new_item;
-                                 return item_data;
-                               }
-                             })
-                             .catch(error => console.error(error))
-                           })
+           var id = Math.random().toString(36).substring(1, 20);
+           await fetch(`${live_url}product/find/${item.id}` )
+             .then(response => response.json())
+             .then(async(json) => {
+               if(json.status == true ){
+                 var new_item = {
+                       "rowId": id,
+                       "id": json.data.products.id,
+                       "name": json.data.products.name,
+                       "qty": item.qty,
+                       "price": json.data.products.price,
+                       "options": {
+                         "shop_id": json.data.products.shop_id,
+                         "weight": json.data.products.item_weight,
+                         "category_id": json.data.products.category_id,
+                         "attribute_key": "",
+                         "attribute_value": ""
+                       }
+                     }
+                 item_data[id] = new_item;
+                 return item_data;
+               }
+             })
+             .catch(error => console.error(error))
+           })
       const is_done_data = await Promise.all(promises);
       if(is_done_data){
           setOrder(item_data);
@@ -117,8 +120,7 @@ export default function PaymentScreen({ navigation, route }) {
            .then(response => response.json())
            .then(json => {
              if(json.status == true ){
-                setShippingInfo(json.data.foreign_shipping.cost);
-//                console.log(json.data.foreign_shipping.cost)
+                setShippingInfo(json.data);
                 setLoading(false)
              }
            })
@@ -131,6 +133,7 @@ export default function PaymentScreen({ navigation, route }) {
     fetch(`${live_url}address/find/${user_id}` )
       .then(response => response.json())
       .then(async(json) => {
+        console.log(json)
         if(json.status == true ){
             setBillingInfo({
                            id: json.data.id,
@@ -188,18 +191,6 @@ export default function PaymentScreen({ navigation, route }) {
                             <View style={{ width: '100%'}}>
                                 <DataTable.Row>
                                   <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Email</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.email }</DataTable.Cell>
-                                </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Phone</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell numeric>{ billingInfo.phone }</DataTable.Cell>
-                                </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
                                     <Text style={styles.itemTitle}>Suite No</Text>
                                   </DataTable.Cell>
                                   <DataTable.Cell numeric>{ billingInfo.suite_no }</DataTable.Cell>
@@ -228,12 +219,18 @@ export default function PaymentScreen({ navigation, route }) {
                                   </DataTable.Cell>
                                   <DataTable.Cell numeric>{ billingInfo.post_code }</DataTable.Cell>
                                 </DataTable.Row>
-                                <DataTable.Row>
-                                  <DataTable.Cell>
-                                    <Text style={styles.itemTitle}>Full Address</Text>
-                                  </DataTable.Cell>
-                                  <DataTable.Cell >{ billingInfo.full_address }</DataTable.Cell>
-                                </DataTable.Row>
+                                <View style={{ padding: 15 }}>
+                                    <Collapse>
+                                        <CollapseHeader>
+                                            <Text style={[styles.itemTitle, {fontSize: 15, color: "#b22234", fontFamily: 'Montserrat-Medium', }]} >Full Address</Text>
+                                        </CollapseHeader>
+                                        <CollapseBody>
+                                          <View style={{ paddingTop: 20 }}>
+                                            <Text style={[styles.itemTitle, {fontSize: 14, fontFamily: 'Montserrat-Medium', }]}>{ billingInfo.full_address }</Text>
+                                          </View>
+                                        </CollapseBody>
+                                    </Collapse>
+                                </View>
                             </View>
                             :
                             <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
@@ -261,24 +258,43 @@ export default function PaymentScreen({ navigation, route }) {
 
                           <DataTable.Row>
                               <DataTable.Cell>
-                              <Text style={styles.itemTitle}>Shipping Address</Text>
+                              <Text style={styles.itemTitle}>Shipping Options</Text>
                               </DataTable.Cell>
-                              <DataTable.Cell numeric>{'\u0024'} { shippingInfo.toFixed(2)  } </DataTable.Cell>
+                              <DataTable.Cell numeric>  </DataTable.Cell>
                           </DataTable.Row>
-
+                          {
+                            shippingInfo &&
+                            Object.keys(shippingInfo).map((item, index) => {
+                                return (
+                                      <DataTable.Row key={index}>
+                                          <DataTable.Cell>
+                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <RadioButton
+                                                   value={selectedOption.value}
+                                                   status={ selectedOption.value === shippingInfo[item].value ? 'checked' : 'unchecked' }
+                                                   onPress={() => setSelectedOption(shippingInfo[item])}
+                                                 />
+                                                 <Text style={[styles.itemTitle, { fontSize: 13, left: 20 }]}>{ shippingInfo[item].value }</Text>
+                                             </View>
+                                          </DataTable.Cell>
+                                          <DataTable.Cell numeric>{'\u0024'} { shippingInfo[item].cost }</DataTable.Cell>
+                                      </DataTable.Row>
+                                )
+                            })
+                          }
                           <DataTable.Row>
                               <DataTable.Cell>
                                 <Text style={[styles.itemTitle, { color: '#b22234', fontFamily: 'Montserrat-Medium' }]}>Total Payable</Text>
                               </DataTable.Cell>
                               <DataTable.Cell numeric>
-                                <Text style={{ color: '#b22234', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
+                                <Text style={{ color: '#b22234', fontFamily: 'Montserrat-Medium' }}>{'\u0024'}{ ( ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal))).toFixed(3) }</Text>
                               </DataTable.Cell>
                           </DataTable.Row>
                         </DataTable>
                     </View>
                     <View style={{ width: '95%', alignSelf: 'center', marginVertical: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                        <TouchableOpacity
-                                           disabled={billingInfo.phone === '' ||
+                                           disabled={ !selectedOption.cost || billingInfo.phone === '' ||
                                                                                              billingInfo.email === '' ||
                                                                                              billingInfo.suburb_or_town === '' ||
                                                                                              billingInfo.state_or_territory === '' ||
@@ -287,17 +303,18 @@ export default function PaymentScreen({ navigation, route }) {
                                                                                              billingInfo.suite_no === '' }
                                            style={[styles.button, { width: '45%' }]}
                                            onPress={() =>  navigation.navigate('makeCardPayment', {
-                                                                                                                                                                                                                        totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
-                                                                                                                                                                                                                        carts: carts,
-                                                                                                                                                                                                                        fax:fax,
-                                                                                                                                                                                                                        orders: orders,
-                                                                                                                                                                                                                        sub_total: cartTotal,
-                                                                                                                                                                                                                        shipping_fee: shippingInfo,
-                                                                                                                                                                                                                        billingInfo: billingInfo.id
-                                                                                                                                                                                                                      })} >
+                                                                                                totalPayment: ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                                                carts: carts,
+                                                                                                fax:fax,
+                                                                                                orders: orders,
+                                                                                                sub_total: cartTotal,
+                                                                                                shipping_fee: shippingInfo,
+                                                                                                billingInfo: billingInfo.id,
+                                                                                                selectedOption: selectedOption
+                                                                                              })} >
                             <Text style={styles.buttonText}>Card Payment</Text>
                        </TouchableOpacity>
-                       <TouchableOpacity disabled={billingInfo.phone === '' ||
+                       <TouchableOpacity disabled={ !selectedOption.cost ||  billingInfo.phone === '' ||
                                                                                            billingInfo.email === '' ||
                                                                                            billingInfo.suburb_or_town === '' ||
                                                                                            billingInfo.state_or_territory === '' ||
@@ -305,13 +322,14 @@ export default function PaymentScreen({ navigation, route }) {
                                                                                            billingInfo.full_address === '' ||
                                                                                            billingInfo.suite_no === '' }
                                      style={[styles.button, { width: '45%', backgroundColor: '#000' }]}  onPress={() =>  navigation.navigate('GooglePayment', {
-                                                                                                                                      totalPayment: shippingInfo + cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                                                                                      totalPayment: ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
                                                                                                                                       carts: carts,
                                                                                                                                       fax:fax,
                                                                                                                                       orders: orders,
                                                                                                                                       sub_total: cartTotal,
                                                                                                                                       shipping_fee: shippingInfo,
-                                                                                                                                      billingInfo: billingInfo.id
+                                                                                                                                      billingInfo: billingInfo.id,
+                                                                                                                                      selectedOption: selectedOption
                                                                                                                                     })} >
                           <ImageBackground source={require('../assets/gpay.png')} resizeMode='contain' style={{ width: '90%', height: '90%' }} />
                        </TouchableOpacity>
@@ -320,10 +338,9 @@ export default function PaymentScreen({ navigation, route }) {
             :
             <>
                 <View style={{ width: '80%', alignSelf: 'center', marginTop: 20 }}>
-                    <Button mode="contained" color="#b22234" style={styles.button}
-                        onPress={() => navigation.navigate('Login') } >
-                        Login before checkout
-                    </Button>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login') }  >
+                      <Text style={styles.buttonText}>Login before checkout</Text>
+                   </TouchableOpacity>
                 </View>
             </>
         }
@@ -354,7 +371,7 @@ const styles = StyleSheet.create({
   },
   cartCon:{
     padding: 10,
-    marginTop: 20,
+    marginTop: 10,
   }, 
   button:{
     width: '100%',

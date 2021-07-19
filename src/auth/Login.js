@@ -28,7 +28,6 @@ export default function LoginScreen({ navigation }) {
           return false;
     }else{
        setSubmitting(true);
-       console.log(userDetails);
        var new_data = new FormData;
        new_data.append('email', userDetails.email);
        new_data.append('password', userDetails.password);
@@ -42,7 +41,6 @@ export default function LoginScreen({ navigation }) {
            })
        .then(response => response.json())
        .then(async(json) => {
-         console.log(json);
           if(json.status == true){
             await SecureStore.setItemAsync('user_details', JSON.stringify(json.data.user_details));
             await SecureStore.setItemAsync('token', json.data.token);

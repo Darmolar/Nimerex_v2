@@ -10,7 +10,7 @@ import { live_url, payment_url, live_url_image, SecureStore, addToCart, addToSav
 const { width, height } = Dimensions.get('window');
 
 export default function makeCardPaymentScreen({ navigation, route }){
-    const { totalPayment, carts, fax, shipping_fee, sub_total, orders, billingInfo } = route.params;
+    const { totalPayment, carts, fax, shipping_fee, sub_total, orders, billingInfo, selectedOption } = route.params;
     const [ userDetails, setUserDetails ] = useState({
                                                     firstname: '',
                                                     lastname: '',
@@ -118,7 +118,7 @@ export default function makeCardPaymentScreen({ navigation, route }){
                           "handling_fee": "0",
                           "shippingcost": [
                             {
-                              "foreign": shipping_fee
+                              "foreign": selectedOption.cost
                             }
                           ],
                           "payment_option": "Card",
