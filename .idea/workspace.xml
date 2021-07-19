@@ -23,23 +23,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5458fa27-7529-4ac3-a7e6-5a4956922ef4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/gpay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/app/src/assets/index.android.bundle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/app/src/main/assets/index.android.bundle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CardPayment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/CardPayment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Network.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Network.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Payment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Response.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Response.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Saved.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Saved.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Search.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Search.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auth/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auth/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/Register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gift/Send_gift.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gift/Send_gift.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/profile/billing_info.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/profile/billing_info.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/profile/edit_profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/profile/edit_profile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/subscriptions/Edit_sub.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/Edit_sub.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/subscriptions/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/Index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/subscriptions/Sub_cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/subscriptions/Sub_cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/drawable/splashscreen.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/res/drawable/splashscreen_image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/navigation/Stack.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/navigation/Stack.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,14 +50,20 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/android" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable" value="ALL" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/android" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
     <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\HP\Desktop\Nimerex_v2\android\app" />
+    </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -109,10 +106,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="137" y="30" width="1092" height="738" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1625844802270" />
-    <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1626088161040">
+    <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1626645702110">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1626088161040" />
+    <state x="439" y="166" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1626645702110" />
     <state x="-7" y="27" width="1038" height="492" key="AVDManager" timestamp="1626554938473">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -122,10 +119,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="489" y="132" key="AndroidProcessChooserDialog/0.0.1366.768@0.0.1366.768" timestamp="1625843388332" />
-    <state x="381" y="121" key="FileChooserDialogImpl" timestamp="1626089389042">
+    <state x="381" y="121" key="FileChooserDialogImpl" timestamp="1626677993263">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="381" y="121" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1626089389042" />
+    <state x="381" y="121" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1626677993263" />
     <state x="381" y="128" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1625858394201" />
     <state width="1323" height="150" key="GridCell.Tab.0.bottom" timestamp="1626033377581">
       <screen x="0" y="0" width="1366" height="768" />
@@ -143,9 +140,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state width="1323" height="150" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1626033377580" />
-    <state x="184" y="29" key="SettingsEditor" timestamp="1625937084380">
-      <screen x="0" y="0" width="1366" height="768" />
+    <state x="184" y="18" key="SettingsEditor" timestamp="1626677582011">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="184" y="18" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1626677582011" />
     <state x="184" y="29" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1625937084380" />
     <state x="339" y="163" width="672" height="642" key="run.anything.popup" timestamp="1626371986877">
       <screen x="0" y="0" width="1366" height="728" />

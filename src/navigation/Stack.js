@@ -74,15 +74,14 @@ export default function MyStack() {
       <Stack.Screen name="EditSubscription" component={EditSubscriptionScreen} options={{headerShown: false}} />
       <Stack.Screen name="EditNewSubscription" component={EditNewSubscriptionScreen} options={{headerShown: false}} />
 
-      <Stack.Screen name="GooglePayment" component={GooglePaymentScreen}  />
+      <Stack.Screen name="GooglePayment" component={GooglePaymentScreen}  options={{title: 'Google Payment'}}  />
       <Stack.Screen name="makeCardPayment" component={makeCardPaymentScreen}  options={{title: 'Card Payment'}} />
 
       <Stack.Screen name="Gift" component={GiftScreen} options={{headerShown: false}} />       
       <Stack.Screen name="SendGift" component={SendGiftScreen} options={{headerShown: false}} />
 
-
       <Stack.Screen name="Response" component={ResponseScreen} options={{headerShown: false}} />
-
+cls
     </Stack.Navigator>
   );
 }
