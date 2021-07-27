@@ -4,13 +4,14 @@ import { StyleSheet, Text, View, Dimensions, Image, FlatList, ImageBackground, S
 import { MaterialCommunityIcons, MaterialIcons } from 'react-native-vector-icons';
 import Carousel from 'react-native-snap-carousel';
 import { Button, TextInput } from 'react-native-paper';
-import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network'; 
- 
+import { live_url, live_url_image, SecureStore, addToCart, addToSavedItem } from './Network';
+import RenderHtml from 'react-native-render-html';
+
 const { width, height } = Dimensions.get('window');
 
 export default function ProductScreen({ navigation, route }) {
     const [ products, setProducts ] = useState(route.params.category);
-
+//products.description.replace( /(<([^>]+)>)/ig, '')
     const  _renderItem = ({item, index}) => {
         return (
             <View style={styles.slide}>
@@ -18,6 +19,9 @@ export default function ProductScreen({ navigation, route }) {
             </View>
         );
     }
+    const source = {
+      html: products.description
+    };
 
     return (
         <SafeAreaView  style={styles.container}>
@@ -58,10 +62,6 @@ export default function ProductScreen({ navigation, route }) {
                             <Text style={styles.prodcutdescription}>{ products.Clothing }</Text>
                         </View>
                         <View style={styles.listCon}>
-                            <Text style={styles.prodcutdescription}>Location</Text>
-                            <Text style={styles.prodcutdescription}>{ products.location }</Text>
-                        </View>
-                        <View style={styles.listCon}>
                             <Text style={styles.prodcutdescription}>Item weight</Text>
                             <Text style={styles.prodcutdescription}>{ products.item_weight }</Text>
                         </View>
@@ -75,7 +75,10 @@ export default function ProductScreen({ navigation, route }) {
                         </View>
                     </View>
                     <View style={{ padding: 10, width: '100%', marginVertical: 5 }}>
-                        <Text style={styles.prodcutdescription}>{ products.description.replace( /(<([^>]+)>)/ig, '') }</Text>
+                        <RenderHtml
+                            contentWidth={100}
+                            source={source}
+                          />
                     </View>
                     
                 </ScrollView>
@@ -83,7 +86,6 @@ export default function ProductScreen({ navigation, route }) {
         </SafeAreaView>
     );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,  
@@ -134,9 +136,9 @@ const styles = StyleSheet.create({
   },
   prodcutdescription:{
     fontSize: 15,
-    fontFamily: 'Montserrat-Regular', 
+    fontFamily: 'Montserrat-Regular',
     textAlign: 'left',
-    color: '#000'
+    color: '#000',
   },
   slideProductConButton:{
     width: '25%',

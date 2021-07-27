@@ -174,7 +174,7 @@ export default function GooglePaymentScreen({ navigation, route }){
                       .catch(error => console.error(error))
                       .finally(res => setSubmitting(false))
                 })
-                .catch((error) => console.log(error.code, error.message))
+                .catch((error) => {console.log(error.code, error.message); setCanUse(false);;})
                 .finally(() => setSubmitting(false) );
             }else{
               setSubmitting(false);
@@ -192,6 +192,7 @@ export default function GooglePaymentScreen({ navigation, route }){
             }
             <Snackbar
               visible={!canUse}
+              onDismiss={() => navigation.goBack()}
               action={{
                 label: 'Close',
                 onPress: () => {

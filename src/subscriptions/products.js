@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     width: '80%',
     height: 35,
     color: '#fff',
-    backgroundColor: 'blue'
+    backgroundColor: '#4BA716'
   },
   slideProductConButtonText:{
     fontSize: 12,

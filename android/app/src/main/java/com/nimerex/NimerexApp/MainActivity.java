@@ -11,7 +11,7 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
 import expo.modules.splashscreen.singletons.SplashScreen;
 import expo.modules.splashscreen.SplashScreenImageResizeMode;
-
+import com.busfor.RNGooglePayPackage;
 
 public class MainActivity extends ReactActivity {
 

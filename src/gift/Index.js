@@ -93,7 +93,9 @@ export default function GiftScreen({ navigation }) {
                                     <Text style={styles.itemTitle}>{ item.shop_name }</Text>
                                 </DataTable.Cell>
                                 <DataTable.Cell numeric>
-                                    <MaterialCommunityIcons name="account-arrow-right" size={25} color="red" onPress={() => navigation.navigate('SendGift', { item: item }) } style={styles.closeButton} />
+                                    <TouchableOpacity style={{ width: '100%', height: '100%' }}>
+                                        <MaterialCommunityIcons name="account-arrow-right" size={30} color="#4BA716" onPress={() => navigation.navigate('SendGift', { item: item }) } style={styles.closeButton} />
+                                    </TouchableOpacity>
                                 </DataTable.Cell>
                             </DataTable.Row>
                         ))

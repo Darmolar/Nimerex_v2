@@ -128,7 +128,9 @@ export default function SubscriptionScreen({ navigation }) {
                                     <Text style={styles.itemTitle}>{ item.total_cost }</Text>
                                 </DataTable.Cell>
                                 <DataTable.Cell numeric>
-                                    <MaterialCommunityIcons name="menu" size={18} color="red" onPress={() => showModal(item) } style={styles.closeButton} />
+                                    <TouchableOpacity style={{ width: '100%', height: '100%' }}>
+                                      <MaterialCommunityIcons name="menu" size={25} color="#4BA716" onPress={() => showModal(item) } style={styles.closeButton} />
+                                    </TouchableOpacity>
                                 </DataTable.Cell>
                             </DataTable.Row>
                         ))

@@ -34,7 +34,7 @@
       "package": "com.Nimerex.NimerexApp",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/splash.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },

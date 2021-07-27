@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, Image, ImageBackground, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, ImageBackground, FlatList, TextInput as NewTextInput, SafeAreaView , ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { MaterialCommunityIcons, Feather } from 'react-native-vector-icons';
 import {Collapse,CollapseHeader, CollapseBody, AccordionList} from 'accordion-collapse-react-native';
 import { Button, TextInput, DataTable, RadioButton   } from 'react-native-paper';
@@ -348,25 +348,52 @@ export default function PaymentScreen({ navigation, route }) {
                                                                                               })} >
                             <Text style={styles.buttonText}>Card Payment</Text>
                        </TouchableOpacity>
-                       <TouchableOpacity disabled={ !selectedOption.cost ||  billingInfo.phone === '' ||
-                                                                                           billingInfo.email === '' ||
-                                                                                           billingInfo.suburb_or_town === '' ||
-                                                                                           billingInfo.state_or_territory === '' ||
-                                                                                           billingInfo.post_code === '' ||
-                                                                                           billingInfo.full_address === '' ||
-                                                                                           billingInfo.suite_no === '' }
-                                     style={[styles.button, { width: '45%', backgroundColor: '#000' }]}  onPress={() =>  navigation.navigate('GooglePayment', {
-                                                                                                                                      totalPayment: ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
-                                                                                                                                      carts: carts,
-                                                                                                                                      fax:fax,
-                                                                                                                                      orders: orders,
-                                                                                                                                      sub_total: cartTotal,
-                                                                                                                                      shipping_fee: shippingInfo,
-                                                                                                                                      billingInfo: billingInfo.id,
-                                                                                                                                      selectedOption: selectedOption
-                                                                                                                                    })} >
-                          <ImageBackground source={require('../assets/gpay.png')} resizeMode='contain' style={{ width: '90%', height: '90%' }} />
-                       </TouchableOpacity>
+                       {
+                            Platform.OS === 'ios' &&
+                           <TouchableOpacity disabled={ !selectedOption.cost ||  billingInfo.phone === '' ||
+                                                                                               billingInfo.email === '' ||
+                                                                                               billingInfo.suburb_or_town === '' ||
+                                                                                               billingInfo.state_or_territory === '' ||
+                                                                                               billingInfo.post_code === '' ||
+                                                                                               billingInfo.full_address === '' ||
+                                                                                               billingInfo.suite_no === '' }
+                                         style={[styles.button, { width: '45%', backgroundColor: 'rgba(255, 255, 255, 0.5)' }]}
+                                         onPress={() =>  navigation.navigate('ApplePayment', {
+                                                                                              totalPayment: ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                                              carts: carts,
+                                                                                              fax:fax,
+                                                                                              orders: orders,
+                                                                                              sub_total: cartTotal,
+                                                                                              shipping_fee: shippingInfo,
+                                                                                              billingInfo: billingInfo.id,
+                                                                                              selectedOption: selectedOption
+                                                                                            })} >
+                              <ImageBackground source={require('../assets/apple_pay.png')} resizeMode='cover' style={{ width: '100%', height: '90%' }} />
+                           </TouchableOpacity>
+                       }
+                       {
+                           Platform.OS === 'android' &&
+                          <TouchableOpacity disabled={ !selectedOption.cost ||  billingInfo.phone === '' ||
+                                                                                              billingInfo.email === '' ||
+                                                                                              billingInfo.suburb_or_town === '' ||
+                                                                                              billingInfo.state_or_territory === '' ||
+                                                                                              billingInfo.post_code === '' ||
+                                                                                              billingInfo.full_address === '' ||
+                                                                                              billingInfo.suite_no === '' }
+                                        style={[styles.button, { width: '45%', backgroundColor: 'rgba(255, 255, 255, 0.5)' }]}
+                                        onPress={() =>  navigation.navigate('GooglePayment', {
+                                                                                             totalPayment: ( selectedOption.cost ? selectedOption.cost : 0 ) +  cartTotal + ((Number(fax)/ 100) * Number(cartTotal)),
+                                                                                             carts: carts,
+                                                                                             fax:fax,
+                                                                                             orders: orders,
+                                                                                             sub_total: cartTotal,
+                                                                                             shipping_fee: shippingInfo,
+                                                                                             billingInfo: billingInfo.id,
+                                                                                             selectedOption: selectedOption
+                                                                                           })} >
+                             <ImageBackground source={require('../assets/gpay.png')} resizeMode='cover' style={{ width: '100%', height: '90%' }} />
+                          </TouchableOpacity>
+                      }
                     </View>
                 </>
             :

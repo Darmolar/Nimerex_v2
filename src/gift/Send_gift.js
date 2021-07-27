@@ -6,12 +6,22 @@ import { Button, TextInput, DataTable, Modal, Chip, Snackbar  } from 'react-nati
 import * as Contacts from 'expo-contacts';
 import { live_url, SecureStore } from '../Network';
 
-const { width, height } = Dimensions.get('window'); 
+const { width, height } = Dimensions.get('window');
+
+const Item = ({ item, onPress }) => {
+    if(!item.phoneNumbers || !item.name ){
+        return null
+    }
+    return( <View style={styles.listCon}>
+               <Text style={styles.listConText}>{ item.name }</Text>
+               <TouchableOpacity onPress={onPress} style={ item.selected ? [styles.listConButton, { backgroundColor: '#000' }]  : styles.listConButton}></TouchableOpacity>
+           </View> )
+   };
 
 export default function SendGiftScreen({ navigation, route }) {
   const [ visible, setVisible] = React.useState(false);
   const [ message, setMessage ] = useState('');
-  const [visible_msg, setVisible_msg] = React.useState(false);
+  const [ visible_msg, setVisible_msg ] = React.useState(false);
   const [ selectedItem, setSelectedItem ] = useState(route.params.item)
   const [ contacts, setContacts ] = React.useState([]);
   const [ fetchingContact, setFetchingContact ] = React.useState(false);
@@ -69,12 +79,11 @@ export default function SendGiftScreen({ navigation, route }) {
     setFetchingContact(true);
     const { data } = await Contacts.getContactsAsync({
       fields: [Contacts.Fields.PhoneNumbers],
-      pageSize: 300
+      pageSize: 200
     });
     setContacts(data);
     if (data.length > 0) { 
       showModal();
-      // console.log(contact[0].phoneNumbers[0].number);
     }
     setFetchingContact(false);
   }
@@ -86,16 +95,14 @@ export default function SendGiftScreen({ navigation, route }) {
         return false;
       }
       setFetchingContact(true);
-      const { data: moreData } = await Contacts.getContactsAsync({
+      const { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
         pageSize: 200,
         pageOffset: contacts.length
       });
-      setContacts([ ...data, moreData  ]);
-//      if (data.length > 0) {
-//        showModal();
-//        // console.log(contact[0].phoneNumbers[0].number);
-//      }
+      if(data.length > 0){
+        setContacts([ ...contacts, data]);
+      }
       setFetchingContact(false);
    }
 
@@ -108,16 +115,21 @@ export default function SendGiftScreen({ navigation, route }) {
       setAllFetchingContact(true);
       const { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
-        pageSize: 300
+        pageSize: 600
       });
       setContacts(data);
       var allContacts = [];
       console.log(data);
       if (data.length > 0) {
         data.map((item) => {
+            if(!item.phoneNumbers || !item.name ){
+                return null
+            }
+            item.selected = true;
             allContacts.push(item.phoneNumbers[0].number);
         });
         setSelectedContacts(allContacts);
+        showModal()
       }
       setAllFetchingContact(false);
   }
@@ -190,6 +202,15 @@ export default function SendGiftScreen({ navigation, route }) {
        .catch(error => console.error(error))
        .finally(res => setSubmitting(false))
     }
+
+  const renderItem = (item, index) => {
+    return (
+      <Item
+        item={item}
+        onPress={() => chooseItem(item.phoneNumbers[0].number, index)}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -266,19 +287,9 @@ export default function SendGiftScreen({ navigation, route }) {
               contacts.length > 0 &&
               <FlatList
                   data={contacts}
-                  renderItem={ item => {
-                        if(item.name == null){
-                            return null
-                        }
-                        return(
-                          <View style={styles.listCon} key={index}>
-                              <Text style={styles.listConText}>{ item.name }</Text>
-                              <TouchableOpacity onPress={() => chooseItem(item.phoneNumbers[0].number, index) } style={ item.selected ? [styles.listConButton, { backgroundColor: '#000' }]  : styles.listConButton}></TouchableOpacity>
-                          </View>
-                        )
-                    }
-                   }
-                  keyExtractor={item => item.phoneNumbers[0].number}
+                  renderItem={({item, index}) => renderItem(item, index)}
+
+                  keyExtractor={item => item.id}
                   onEndReached={() => pickContactMore() }
               />
             }
